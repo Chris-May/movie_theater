@@ -8,6 +8,7 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "eventsourcing>=9.3.5",
     "quart>=0.20.0",
 ]
 

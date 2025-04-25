@@ -42,6 +42,18 @@ wheels = [
 ]
 
 [[package]]
+name = "eventsourcing"
+version = "9.3.5"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/41/4f/ea439503e7c68edd703b1d22667f0c2cfa4c16b2d59e54d590025b38b863/eventsourcing-9.3.5.tar.gz", hash = "sha256:30ba7cc28c409abff0005967e9053f2f81334acb796793806444ed081f95a4f6", size = 69955 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d1/64/76830243518339da01d631acad42b800b0999925905ceb888af747dd458f/eventsourcing-9.3.5-py3-none-any.whl", hash = "sha256:7debbf1fbf5381cd3b072356a00fd21d6bd29ccf526412e3ca061cfe3068a92b", size = 73970 },
+]
+
+[[package]]
 name = "flask"
 version = "3.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -176,11 +188,15 @@ name = "movie"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "eventsourcing" },
     { name = "quart" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "quart", specifier = ">=0.20.0" }]
+requires-dist = [
+    { name = "eventsourcing", specifier = ">=9.3.5" },
+    { name = "quart", specifier = ">=0.20.0" },
+]
 
 [[package]]
 name = "priority"
@@ -209,6 +225,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/1d/9d/12e1143a5bd2ccc05c293a6f5ae1df8fd94a8fc1440ecc6c344b2b30ce13/quart-0.20.0.tar.gz", hash = "sha256:08793c206ff832483586f5ae47018c7e40bdd75d886fee3fabbdaa70c2cf505d", size = 63874 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/7e/e9/cc28f21f52913adf333f653b9e0a3bf9cb223f5083a26422968ba73edd8d/quart-0.20.0-py3-none-any.whl", hash = "sha256:003c08f551746710acb757de49d9b768986fd431517d0eb127380b656b98b8f1", size = 77960 },
+]
+
+[[package]]
+name = "typing-extensions"
+version = "4.13.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f6/37/23083fcd6e35492953e8d2aaaa68b860eb422b34627b13f2ce3eb6106061/typing_extensions-4.13.2.tar.gz", hash = "sha256:e6c81219bd689f51865d9e372991c540bda33a0379d5573cddb9a3a23f7caaef", size = 106967 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8b/54/b1ae86c0973cc6f0210b53d508ca3641fb6d0c56823f288d108bc7ab3cc8/typing_extensions-4.13.2-py3-none-any.whl", hash = "sha256:a439e7c04b49fec3e5d3e2beaa21755cadbbdc391694e28ccdd36ca4a1408f8c", size = 45806 },
 ]
 
 [[package]]
