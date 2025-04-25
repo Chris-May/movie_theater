@@ -7,7 +7,9 @@ authors = [
     { name = "Chris May", email = "chris@may.org" }
 ]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "quart>=0.20.0",
+]
 
 [project.scripts]
 movie = "movie:main"
