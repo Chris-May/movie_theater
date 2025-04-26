@@ -17,3 +17,52 @@ movie = "movie:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0",
+    "pytest>=8.3.5",
+]
+
+
+[tool.pytest.ini_options]
+asyncio_mode = 'auto'
+asyncio_default_fixture_loop_scope = 'function'
+addopts = '--strict-markers --strict-config'
+xfail_strict = true
+markers = [
+    'network: requires a network connection',
+]
+
+
+
+
+[tool.ruff]
+fix = true
+line-length = 120
+
+[tool.ruff.lint]
+select = ['ALL']
+ignore = ['D211', 'D212', 'COM812', 'ISC001', 'Q003', 'Q000', 'Q', 'D', 'C408', 'ANN', 'FA', 'PERF203']
+unfixable = ['B']
+
+[tool.ruff.lint.per-file-ignores]
+# Ignore 'E402' (import violations) in all '__init__.py' files, and in select subdirectories.
+'__init__.py' = ['E402']
+'**/{tests,docs,tools}/*' = ['E402', 'E501', 'S101']
+'test_*.py' = ['E402', 'E501', 'S101']
+
+[tool.ruff.format]
+quote-style = 'preserve'
+
+[tool.coverage.run]
+branch = true
+source = ['api', 'data_processing', 'front_end', 'shared']
+command_line = '-m pytest tests'
+
+[tool.coverage.report]
+exclude_also = [
+    'def __repr__',
+    'if __name__ == .__main__.:',
+    '@(abc\\.)?abstractmethod',
+]
