@@ -8,6 +8,6 @@ from movie.domain.application import MovieApplication
 def add_movie(name, duration, poster_url, runner: Runner):
     name = str(name)
     duration = int(duration)
-    poster_url = urlparse(poster_url)
+    poster_url = urlparse(poster_url).geturl()
     app = runner.get(MovieApplication)
     return app.add_movie(name, duration, poster_url)
