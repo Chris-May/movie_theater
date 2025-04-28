@@ -8,7 +8,7 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
-    "eventsourcing>=9.3.5",
+    "eventsourcing>=9.4.0b3",
     "quart>=0.20.0",
 ]
 
@@ -21,14 +21,15 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
+    "dirty-equals>=0.9.0",
     "pre-commit>=4.2.0",
     "pytest>=8.3.5",
+    "ruff>=0.11.7",
+    "coverage>=7.8.0",
 ]
 
 
 [tool.pytest.ini_options]
-asyncio_mode = 'auto'
-asyncio_default_fixture_loop_scope = 'function'
 addopts = '--strict-markers --strict-config'
 xfail_strict = true
 markers = [
