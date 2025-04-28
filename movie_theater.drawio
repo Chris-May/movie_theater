@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.2.2 Chrome/134.0.6998.178 Electron/35.1.2 Safari/537.36" version="26.2.2">
   <diagram name="Page-1" id="JmkUH-GK_HIM8gPAQ7Ks">
-    <mxGraphModel dx="2066" dy="1586" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="866" dy="732" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -492,7 +492,7 @@
             <mxPoint x="2047" y="-333" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="LDC4ZmzUSmyWV4IE2Z3T-16" value="Givaway registration" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+        <mxCell id="LDC4ZmzUSmyWV4IE2Z3T-16" value="Givaway registration" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;movable=0;rotatable=0;deletable=0;editable=0;locked=1;connectable=0;" vertex="1" parent="1">
           <mxGeometry x="1467" y="-370" width="127" height="26" as="geometry" />
         </mxCell>
       </root>
