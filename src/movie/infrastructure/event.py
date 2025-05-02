@@ -1,6 +1,6 @@
 import functools
 from datetime import UTC, datetime
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -10,8 +10,8 @@ utc_now = functools.partial(datetime.now, tz=UTC)
 class DomainEvent(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
-    event_id: int = Field(default_factory=uuid4)
-    entity_id: str
+    event_id: UUID = Field(default_factory=uuid4)
+    entity_id: UUID
     entity_version: int
     event_name: str
     stored_at: datetime = Field(default_factory=utc_now)
@@ -22,7 +22,7 @@ class DomainEvent(BaseModel):
 
     @classmethod
     def deserialize(cls, data):
-        return cls.model_validate(data)
+        return cls.model_validate_json(data)
 
 
 class DomainEventCollection:
