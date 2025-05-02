@@ -1,46 +1,50 @@
-import importlib
 import inspect
 import logging
 from collections import defaultdict
 from collections.abc import Callable
-from importlib import resources as import_res
 
-from api import get_container
-from api.domain.events import DomainEvent
-from api.infrastructure.store import IEventStore, StreamEvent
+from movie import services
+from movie.entry import app
+from movie.infrastructure.event import DomainEvent
+from movie.infrastructure.store import IEventStore, StreamEvent
 
 logger = logging.getLogger(__name__)
 
 _event_handlers: dict[Callable, list[Callable]] = defaultdict(list)
 
 
-async def publish(event: DomainEvent):
-    """Publish a domain event to all subscribers.
+def publish(event: DomainEvent):
+    """Publish a domain events to all subscribers.
 
-    The event is first persisted, then sent to all matching subscribers.
-    Each subscriber receives the event only once.
+    The events is first persisted, then sent to all matching subscribers.
+    Each subscriber receives the events only once.
     """
     # First persist the event
-    if isinstance(event, DomainEvent):
-        container = get_container()
-        event_store = await container.aget(IEventStore)
-        conditioned = StreamEvent(stream_id=event.entity_id, version=event.entity_version, event=event)
-        logger.info('saving event %s %s', conditioned.event.event_name, conditioned.stream_id)
-        event_store.save(conditioned)
+    try:
+        if isinstance(event, DomainEvent):
+            services.init_app(app)
+            event_store = services.get(IEventStore)
+            conditioned = StreamEvent(stream_id=event.entity_id, version=event.entity_version, event=event)
+            logger.info('saving event %s %s', conditioned.event.event_name, conditioned.stream_id)
+            event_store.save(conditioned)
 
-    # Then notify subscribers
-    matching_handlers = []
-    for should_handle, handlers in _event_handlers.items():
-        if should_handle(event):
-            for handler in handlers:
-                if handler not in matching_handlers:
-                    matching_handlers.append(handler)
+            # Then notify subscribers
+            matching_handlers = []
+            for should_handle, handlers in _event_handlers.items():
+                if should_handle(event):
+                    for handler in handlers:
+                        if handler not in matching_handlers:
+                            matching_handlers.append(handler)
 
-    for handler in matching_handlers:
-        if inspect.iscoroutinefunction(handler):
-            await handler(event)
-        else:
-            handler(event)
+            for handler in matching_handlers:
+                if inspect.iscoroutinefunction(handler):
+                    handler(event)
+                else:
+                    handler(event)
+
+    except Exception as e:
+        logger.info('Event store not available: %s', e)
+        raise
 
 
 def subscribe(event_predicate: Callable, subscriber: Callable):
@@ -65,16 +69,5 @@ def unsubscribe_all(subscriber):
         del _event_handlers[predicate]
 
 
-def load_subscribers(base_package: str):
-    """Autoload all subscribe.py modules in the given package."""
-    logger.info("Loading subscribers from %s", base_package)
-    for resource in import_res.contents(base_package):
-        with import_res.path(base_package, resource) as fspath:
-            if fspath.is_dir():
-                for module_path in fspath.rglob('subscribe.py'):
-                    *_, api_part = str(module_path).partition('api/')
-                    dotted_path = api_part.replace('/', '.').replace('.py', '')
-                    module = importlib.import_module(dotted_path)
-                    if hasattr(module, "initialize_subscriber"):
-                        logger.info("Initializing subscriber %s", module_path)
-                        module.initialize_subscriber()
+class EventListeners:
+    pass

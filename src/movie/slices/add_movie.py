@@ -1,18 +1,28 @@
-from movie.infrastructure.entity import Entity
+import flask
+from flask.typing import ResponseValue
+
+from movie.domain.model import Movie
+
+bp = flask.Blueprint("add_movie", __name__)
 
 
-class Movie(Entity):
-    title: str
-    duration: int
-    poster_url: str
+@bp.post("/movie")
+def add_movie_endpoint() -> ResponseValue:
+    data = flask.request.get_json()
+    name = data.get("name")
+    duration = data.get("duration")
+    poster_url = data.get("poster_url")
 
-    def __repr__(self):
-        return (
-            f'<Movie title={self.title}, duration={self.duration}, '
-            f'poster_url={self.poster_url}, '
-            f'id={self.id}, version={self.version}>'
-        )
+    if not all([name, duration, poster_url]):
+        return flask.make_response({"error": "Missing required fields"}, 400)
 
-    @property
-    def movie_id(self):
-        return self.id
+    movie = Movie.create(name=name, duration=duration, poster_url=poster_url)
+    return flask.make_response(
+        {
+            "movie_id": str(movie.movie_id),
+            "name": movie.title,
+            "duration": movie.duration,
+            "poster_url": movie.poster_url,
+        },
+        201,
+    )

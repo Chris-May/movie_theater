@@ -1,13 +1,16 @@
 import abc
 from datetime import datetime
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from pydantic import BaseModel, ConfigDict, Field
+from sqlalchemy import JSON, Uuid
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
+from movie.domain import events
 from movie.infrastructure.event import DomainEvent, utc_now
 
 event_to_class_map = {
-    # 'EventName': EventClass,
+    'MovieAdded': events.MovieAdded,
 }
 
 
@@ -18,7 +21,7 @@ class Event(BaseModel):
 class StreamEvent(BaseModel):
     """Represents on bundle in a stream of bundles for one item."""
 
-    stream_id: str
+    stream_id: UUID
     version: int
     event: DomainEvent
 
@@ -27,20 +30,24 @@ class StreamEvent(BaseModel):
             stream_id=self.stream_id,
             stream_version=self.version,
             event_name=self.event.event_name,
-            event_data=self.event.model_dump(),
+            event_data=self.event.model_dump_json(),
             meta_data={},
             stored_at=utc_now(),
         )
 
 
-class SavedEvent(BaseModel):
-    id: int = Field(default_factory=uuid4)
-    stream_id: str
-    stream_version: int
-    event_name: str
-    event_data: dict
-    meta_data: dict
-    stored_at: datetime = Field(default_factory=utc_now)
+class Base(DeclarativeBase): ...
+
+
+class SavedEvent(Base):
+    __tablename__ = 'events'
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4, type_=Uuid)
+    stream_id: Mapped[UUID] = mapped_column(index=True, type_=Uuid)
+    stream_version: Mapped[int]
+    event_name: Mapped[str]
+    event_data: Mapped[str] = mapped_column(JSON)
+    meta_data: Mapped[str] = mapped_column(JSON)
+    stored_at: Mapped[datetime] = Field(default_factory=utc_now)
 
     def to_domain_event(self):
         klass = event_to_class_map[self.event_name]
