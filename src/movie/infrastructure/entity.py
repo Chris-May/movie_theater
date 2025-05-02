@@ -1,9 +1,11 @@
 from functools import singledispatchmethod
-from uuid import UUID, uuid4
+from typing import TYPE_CHECKING
 
 from .event import DomainEvent, DomainEventCollection
 from .exceptions import UnknownEventError
-from .pubsub import publish
+
+if TYPE_CHECKING:
+    from uuid import UUID
 
 
 class Entity:
@@ -11,16 +13,18 @@ class Entity:
         self.register_events()
         self._pending_events = []
         self.version = 0
-        self.id: UUID = uuid4()
+        self.id: UUID
         for event in events:
             self.apply(event)
 
     def increment_version(self):
         self.version += 1
 
-    async def publish(self, event: DomainEvent):
+    def publish(self, event: DomainEvent):
+        from .pubsub import publish
+
         self.apply(event)
-        await publish(event)
+        publish(event)
 
     @singledispatchmethod
     def apply(self, event):
