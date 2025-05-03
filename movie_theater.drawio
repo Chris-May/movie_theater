@@ -183,7 +183,7 @@
         <mxCell id="vuQsww0IuLCk6k9ByEk7-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Helvetica;fontSize=12;fontColor=default;exitX=0.475;exitY=0.004;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="vuQsww0IuLCk6k9ByEk7-33" target="vuQsww0IuLCk6k9ByEk7-39" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="vuQsww0IuLCk6k9ByEk7-33" value="&lt;b&gt;now_playing_view&lt;/b&gt;&lt;div&gt;movie_id&lt;/div&gt;&lt;div&gt;movie_title&lt;/div&gt;&lt;div&gt;movie_poster_url&lt;/div&gt;&lt;div&gt;showing_id&lt;/div&gt;&lt;div&gt;showing_time&lt;/div&gt;&lt;div&gt;tickets_remaining&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+        <mxCell id="vuQsww0IuLCk6k9ByEk7-33" value="&lt;b&gt;now_playing&lt;/b&gt;&lt;div&gt;movie_id&lt;/div&gt;&lt;div&gt;movie_title&lt;/div&gt;&lt;div&gt;movie_poster_url&lt;/div&gt;&lt;div&gt;showing_id&lt;/div&gt;&lt;div&gt;showing_time&lt;/div&gt;&lt;div&gt;tickets_remaining&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="529" y="-6" width="129" height="120" as="geometry" />
         </mxCell>
         <mxCell id="vuQsww0IuLCk6k9ByEk7-35" value="Now Showing" style="swimlane;whiteSpace=wrap;html=1;" parent="1" vertex="1">
