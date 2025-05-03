@@ -18,3 +18,11 @@ class ShowingAdded(DomainEvent):
     start_time: datetime
     available_seats: list[str]
     event_name: str = Field('ShowingAdded', frozen=True)
+
+
+class TicketCancelled:
+    pass
+
+
+class TicketReserved:
+    pass

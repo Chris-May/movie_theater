@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.2.15 Chrome/134.0.6998.205 Electron/35.2.1 Safari/537.36" version="26.2.15">
   <diagram name="Page-1" id="JmkUH-GK_HIM8gPAQ7Ks">
-    <mxGraphModel dx="1250" dy="1637" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="837" dy="1036" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -92,6 +92,9 @@
           <mxGeometry x="292" y="256" width="120" height="88" as="geometry" />
         </mxCell>
         <mxCell id="5K-VJtDxBj_M2HmHMAOJ-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="vuQsww0IuLCk6k9ByEk7-3" target="5K-VJtDxBj_M2HmHMAOJ-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ypWTz2C0_0CNNt2PtK0u-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="vuQsww0IuLCk6k9ByEk7-3" target="5K-VJtDxBj_M2HmHMAOJ-6">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="vuQsww0IuLCk6k9ByEk7-3" value="ticket reserved" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
@@ -508,7 +511,7 @@
         <mxCell id="5K-VJtDxBj_M2HmHMAOJ-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" parent="1" source="5K-VJtDxBj_M2HmHMAOJ-6" target="vuQsww0IuLCk6k9ByEk7-47" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5K-VJtDxBj_M2HmHMAOJ-6" value="&lt;b&gt;showing_detail_view&lt;/b&gt;&lt;div&gt;showing_id&lt;/div&gt;&lt;div&gt;showing_time&lt;/div&gt;&lt;div&gt;movie_name&lt;/div&gt;&lt;div&gt;purchased_tickets&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+        <mxCell id="5K-VJtDxBj_M2HmHMAOJ-6" value="&lt;b&gt;showing_detail&lt;/b&gt;&lt;div&gt;showing_id&lt;/div&gt;&lt;div&gt;showing_time&lt;/div&gt;&lt;div&gt;movie_name&lt;/div&gt;&lt;div&gt;purchased_tickets&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="807" y="-6" width="145" height="120" as="geometry" />
         </mxCell>
         <mxCell id="5K-VJtDxBj_M2HmHMAOJ-9" value="Giveaway entries" style="swimlane;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -572,7 +575,7 @@
         <mxCell id="ypWTz2C0_0CNNt2PtK0u-21" value="buy ticket" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="1426" y="91" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="ypWTz2C0_0CNNt2PtK0u-22" value="ticket reserved" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+        <mxCell id="ypWTz2C0_0CNNt2PtK0u-22" value="ticket purchased" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
           <mxGeometry x="1434" y="259" width="120" height="60" as="geometry" />
         </mxCell>
       </root>

@@ -15,7 +15,7 @@ _event_handlers: dict[Callable, list[Callable]] = defaultdict(list)
 def publish(event: DomainEvent):
     """Publish a domain events to all subscribers.
 
-    The events is first persisted, then sent to all matching subscribers.
+    The event is first persisted, then sent to all matching subscribers.
     Each subscriber receives the events only once.
     """
     # First persist the event

@@ -47,7 +47,7 @@ line-length = 120
 
 [tool.ruff.lint]
 select = ['ALL']
-ignore = ['D211', 'D212', 'COM812', 'ISC001', 'Q003', 'Q000', 'Q', 'D', 'C408', 'ANN', 'FA', 'PERF203']
+ignore = ['D211', 'D212', 'COM812', 'ISC001', 'Q003', 'Q000', 'Q', 'D', 'C408', 'ANN', 'FA', 'PERF203', 'DTZ001']
 unfixable = ['B']
 
 [tool.ruff.lint.per-file-ignores]
