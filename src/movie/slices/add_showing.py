@@ -1,0 +1,40 @@
+from uuid import UUID
+
+import flask
+from flask.typing import ResponseValue
+
+from movie.domain.model import Showing
+
+bp = flask.Blueprint("add_showing", __name__)
+
+
+@bp.post("/showing")
+def add_showing_endpoint() -> ResponseValue:
+    data = flask.request.get_json()
+    movie_id = data.get("movie_id")
+    start_time = data.get("start_time")
+    available_seats = data.get("available_seats")
+
+    if not all([movie_id, start_time, available_seats]):
+        return flask.make_response({"error": "Missing required fields"}, 400)
+
+    try:
+        movie_id = UUID(movie_id)
+    except (ValueError, TypeError):
+        return flask.make_response({"error": "Invalid movie_id format"}, 400)
+
+    try:
+        available_seats = int(available_seats)
+    except (ValueError, TypeError):
+        return flask.make_response({"error": "Available seats must be a number"}, 400)
+
+    showing = Showing.create(movie_id=movie_id, start_time=start_time, available_seats=available_seats)
+    return flask.make_response(
+        {
+            "showing_id": str(showing.showing_id),
+            "movie_id": str(showing.movie_id),
+            "start_time": showing.start_time,
+            "available_seats": showing.available_seats,
+        },
+        201,
+    )

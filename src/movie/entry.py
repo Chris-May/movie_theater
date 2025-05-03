@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from . import services
 from .infrastructure.store import Base, IEventStore, SavedEvent, StreamEvent
-from .slices import add_movie
+from .slices import add_movie, add_showing
 
 
 class SqlAlchemyEventStore(IEventStore):
@@ -58,6 +58,7 @@ def create_app(config_file=None) -> Flask:
         services.close_registry(app)
 
     app.register_blueprint(add_movie.bp)
+    app.register_blueprint(add_showing.bp)
     return app
 
 

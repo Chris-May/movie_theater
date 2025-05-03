@@ -11,6 +11,7 @@ from movie.infrastructure.event import DomainEvent, utc_now
 
 event_to_class_map = {
     'MovieAdded': events.MovieAdded,
+    'ShowingAdded': events.ShowingAdded,
 }
 
 
