@@ -3,6 +3,7 @@ import tomllib
 import uuid
 
 from flask import Flask
+from flask_swagger import swagger
 from sqlalchemy import Connection, Engine, create_engine, select, text
 from sqlalchemy.orm import Session
 
@@ -59,6 +60,7 @@ def create_app(config_file=None) -> Flask:
 
     app.register_blueprint(add_movie.bp)
     app.register_blueprint(add_showing.bp)
+    app.add_url_rule("/spec", "spec", lambda: swagger(app))
     return app
 
 
