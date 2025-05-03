@@ -1,4 +1,5 @@
 import atexit
+import tomllib
 import uuid
 
 from flask import Flask
@@ -28,8 +29,11 @@ class SqlAlchemyEventStore(IEventStore):
             session.commit()
 
 
-def create_app():
+def create_app(config_file=None) -> Flask:
     app = Flask(__name__)
+    app.config.from_object('movie.default_settings')
+    if config_file:
+        app.config.from_file(config_file, load=tomllib.load, text=False)
     app = services.init_app(app)
     engine = create_engine('sqlite:///movie.db')
 
