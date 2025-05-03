@@ -42,7 +42,7 @@ class Movie(Entity):
 class Showing(Entity):
     movie_id: UUID
     start_time: str
-    available_seats: int
+    available_seats: list[str]
 
     def __repr__(self):
         return (

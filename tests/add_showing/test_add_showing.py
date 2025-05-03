@@ -13,7 +13,12 @@ def test__add_showing__creates_event(app):
 
     # Now create a showing for that movie
     response = app.test_client().post(
-        "/showing", json={"movie_id": movie_id, "start_time": "2023-06-15T19:30:00", "available_seats": 100}
+        "/showing",
+        json={
+            "movie_id": movie_id,
+            "start_time": "2023-06-15T19:30:00",
+            "available_seats": ["A1", "A2", "A3", "B1", "B2", "B3"],
+        },
     )
     data = response.get_json()
 
@@ -25,4 +30,4 @@ def test__add_showing__creates_event(app):
     # Verify the response contains the expected data
     assert data['movie_id'] == movie_id
     assert data['start_time'] == "2023-06-15T19:30:00"
-    assert data['available_seats'] == 100  # noqa: PLR2004
+    assert data['available_seats'] == ["A1", "A2", "A3", "B1", "B2", "B3"]

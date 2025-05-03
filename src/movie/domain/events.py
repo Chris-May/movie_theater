@@ -15,5 +15,5 @@ class MovieAdded(DomainEvent):
 class ShowingAdded(DomainEvent):
     movie_id: UUID
     start_time: str
-    available_seats: int
+    available_seats: list[str]
     event_name: str = Field('ShowingAdded', frozen=True)

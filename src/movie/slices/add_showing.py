@@ -23,10 +23,8 @@ def add_showing_endpoint() -> ResponseValue:
     except (ValueError, TypeError):
         return flask.make_response({"error": "Invalid movie_id format"}, 400)
 
-    try:
-        available_seats = int(available_seats)
-    except (ValueError, TypeError):
-        return flask.make_response({"error": "Available seats must be a number"}, 400)
+    if not isinstance(available_seats, list) or not all(isinstance(seat, str) for seat in available_seats):
+        return flask.make_response({"error": "Available seats must be a list of strings"}, 400)
 
     showing = Showing.create(movie_id=movie_id, start_time=start_time, available_seats=available_seats)
     return flask.make_response(
