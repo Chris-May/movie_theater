@@ -1,3 +1,4 @@
+from datetime import datetime
 from uuid import UUID
 
 from pydantic import Field
@@ -14,6 +15,6 @@ class MovieAdded(DomainEvent):
 
 class ShowingAdded(DomainEvent):
     movie_id: UUID
-    start_time: str
+    start_time: datetime
     available_seats: list[str]
     event_name: str = Field('ShowingAdded', frozen=True)

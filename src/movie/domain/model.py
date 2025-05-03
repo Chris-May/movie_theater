@@ -1,3 +1,4 @@
+from datetime import datetime
 from uuid import UUID, uuid4
 
 from movie.domain.events import MovieAdded, ShowingAdded
@@ -41,7 +42,7 @@ class Movie(Entity):
 
 class Showing(Entity):
     movie_id: UUID
-    start_time: str
+    start_time: datetime
     available_seats: list[str]
 
     def __repr__(self):

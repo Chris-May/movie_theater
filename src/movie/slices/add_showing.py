@@ -1,3 +1,4 @@
+from datetime import datetime
 from uuid import UUID
 
 import flask
@@ -23,6 +24,11 @@ def add_showing_endpoint() -> ResponseValue:
     except (ValueError, TypeError):
         return flask.make_response({"error": "Invalid movie_id format"}, 400)
 
+    try:
+        start_time = datetime.fromisoformat(start_time)
+    except ValueError:
+        return flask.make_response({"error": "start_time must be ISO 8601 format"}, 400)
+
     if not isinstance(available_seats, list) or not all(isinstance(seat, str) for seat in available_seats):
         return flask.make_response({"error": "Available seats must be a list of strings"}, 400)
 
@@ -31,7 +37,7 @@ def add_showing_endpoint() -> ResponseValue:
         {
             "showing_id": str(showing.showing_id),
             "movie_id": str(showing.movie_id),
-            "start_time": showing.start_time,
+            "start_time": showing.start_time.isoformat(),
             "available_seats": showing.available_seats,
         },
         201,
