@@ -4,7 +4,6 @@ from collections import defaultdict
 from collections.abc import Callable
 
 from movie import services
-from movie.entry import app
 from movie.infrastructure.event import DomainEvent
 from movie.infrastructure.store import IEventStore, StreamEvent
 
@@ -22,7 +21,6 @@ def publish(event: DomainEvent):
     # First persist the event
     try:
         if isinstance(event, DomainEvent):
-            services.init_app(app)
             event_store = services.get(IEventStore)
             conditioned = StreamEvent(stream_id=event.entity_id, version=event.entity_version, event=event)
             logger.info('saving event %s %s', conditioned.event.event_name, conditioned.stream_id)

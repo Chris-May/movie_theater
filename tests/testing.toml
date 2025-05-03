@@ -1,1 +1,1 @@
-DATABASE_CONNECTION = 'sqlite://:memory:'
+DATABASE_CONNECTION = 'sqlite:///:memory:'

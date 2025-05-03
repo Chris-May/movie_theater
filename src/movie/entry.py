@@ -35,7 +35,7 @@ def create_app(config_file=None) -> Flask:
     if config_file:
         app.config.from_file(config_file, load=tomllib.load, text=False)
     app = services.init_app(app)
-    engine = create_engine('sqlite:///movie.db')
+    engine = create_engine(app.config['DATABASE_CONNECTION'])
 
     def connection_factory():
         with engine.connect() as conn:
@@ -62,7 +62,6 @@ def create_app(config_file=None) -> Flask:
     return app
 
 
-app = create_app()
-
 if __name__ == "__main__":
+    app = create_app()
     app.run(debug=True, port=5001)
