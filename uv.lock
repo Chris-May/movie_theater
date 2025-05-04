@@ -94,6 +94,16 @@ wheels = [
 ]
 
 [[package]]
+name = "flask-swagger"
+version = "0.2.14"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "flask" },
+    { name = "pyyaml" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/b2/a9/a6c05fbc592ac482bf9557e47957c429d2be8cb8addfbc92853fb862ea8f/flask-swagger-0.2.14.tar.gz", hash = "sha256:b4085f5bc36df4c20b6548cd1413adc9cf35719b0f0695367cd542065145294d", size = 8645 }
+
+[[package]]
 name = "greenlet"
 version = "3.2.1"
 source = { registry = "https://pypi.org/simple" }
@@ -210,6 +220,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "flask" },
+    { name = "flask-swagger" },
     { name = "pydantic" },
     { name = "sqlalchemy" },
     { name = "svcs" },
@@ -225,6 +236,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "flask", specifier = ">=3.1.0" },
+    { name = "flask-swagger", specifier = ">=0.2.14" },
     { name = "pydantic", specifier = ">=2.11.4" },
     { name = "sqlalchemy", specifier = ">=2.0.40" },
     { name = "svcs", specifier = ">=25.1.0" },

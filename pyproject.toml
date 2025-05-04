@@ -9,6 +9,7 @@ authors = [
 requires-python = ">=3.12"
 dependencies = [
     "flask>=3.1.0",
+    "flask-swagger>=0.2.14",
     "pydantic>=2.11.4",
     "sqlalchemy>=2.0.40",
     "svcs>=25.1.0",
