@@ -7,9 +7,9 @@ from flask_swagger import swagger
 from sqlalchemy import Connection, Engine, create_engine, select, text
 from sqlalchemy.orm import Session
 
-from . import services
-from .infrastructure.store import Base, IEventStore, SavedEvent, StreamEvent
-from .slices import add_movie, add_showing
+from movie import services
+from movie.infrastructure.store import Base, IEventStore, SavedEvent, StreamEvent
+from movie.slices import add_movie, add_showing
 
 
 class SqlAlchemyEventStore(IEventStore):

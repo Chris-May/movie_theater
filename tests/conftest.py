@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from movie.entry import create_app
+from movie.web.entry import create_app
 
 
 @pytest.fixture
