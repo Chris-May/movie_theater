@@ -1,1 +1,16 @@
 {% extends 'base.html' %}
+{% block content %}
+  <h1>{{ showing.movie_name }} at {{ showing.start_time.strftime('%I:%M %p') }}, <span class="text-sm">{{ showing.start_time.strftime('%m/%d/%y') }}</span></h1>
+  <div>
+  {{ showing.row }}
+  {% for row in showing.rows %}
+    <div style="text-align: center">
+    {% for seat in row.1  %}
+      <svg id="seat-{{ seat }}" viewBox="0 0 2 2" fill="none" xmlns="http://www.w3.org/2000/svg" width="1em" style="display: inline-block;">
+      <circle r="1" cx="1" cy="1" fill="{{showing.get_color(seat)}}" />
+      </svg>
+    {% endfor %}
+    </div>
+  {% endfor %}
+  </div>
+{% endblock %}

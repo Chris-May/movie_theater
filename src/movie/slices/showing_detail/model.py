@@ -1,3 +1,6 @@
+import itertools as it
+from collections.abc import Iterable
+
 from sqlalchemy import Column, DateTime, Integer, String
 from sqlalchemy.orm import Session
 
@@ -18,6 +21,16 @@ class ShowingDetail(Base):
     reserved_seats = Column(String, nullable=False)  # comma-separated
     all_seats = Column(String, nullable=False)  # comma-separated
 
+    def __repr__(self):
+        return (
+            '<ShowingDetail '
+            f'showing_id={self.showing_id}, '
+            f'movie_name={self.movie_name}, '
+            f'available_seat_count={len(self.available_seats)}, '
+            f'reserved_seat_count={len(self.reserved_seats)} '
+            '>'
+        )
+
     @staticmethod
     def seats_to_str(seats):
         return ','.join(seats)
@@ -25,6 +38,27 @@ class ShowingDetail(Base):
     @staticmethod
     def str_to_seats(seats_str):
         return [s for s in seats_str.split(',') if s]
+
+    @property
+    def all_seat_list(self) -> list[str]:
+        return self.all_seats.split(',')
+
+    @property
+    def available(self) -> set[str]:
+        return set(self.available_seats.split(','))
+
+    @property
+    def reserved(self) -> set[str]:
+        return set(self.reserved_seats.split(','))
+
+    @property
+    def rows(self) -> Iterable[tuple[str, Iterable[str]]]:
+        return it.groupby(self.all_seat_list, lambda x: x[0])
+
+    def get_color(self, seat: str):
+        if seat in self.reserved:
+            return 'black'
+        return '#bada55'
 
 
 def handle_showing_added(event: events.ShowingAdded):
