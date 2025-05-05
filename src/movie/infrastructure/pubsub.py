@@ -4,12 +4,20 @@ from collections import defaultdict
 from collections.abc import Callable
 
 from movie import services
+from movie.domain import events
 from movie.infrastructure.event import DomainEvent
 from movie.infrastructure.store import IEventStore, StreamEvent
+from movie.slices.showing_detail import model as showing_detail_model
 
 logger = logging.getLogger(__name__)
 
 _event_handlers: dict[Callable, list[Callable]] = defaultdict(list)
+
+_subscriptions = {
+    lambda e: isinstance(e, events.ShowingAdded): showing_detail_model.handle_showing_added,
+    lambda e: isinstance(e, events.TicketReserved): showing_detail_model.handle_ticket_reserved,
+    lambda e: isinstance(e, events.TicketCancelled): showing_detail_model.handle_ticket_cancelled,
+}
 
 
 def publish(event: DomainEvent):
@@ -65,6 +73,10 @@ def unsubscribe_all(subscriber):
 
     for predicate in predicates_for_removal:
         del _event_handlers[predicate]
+
+
+for predicate, handler in _subscriptions.items():
+    subscribe(predicate, handler)
 
 
 class EventListeners:

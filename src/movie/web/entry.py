@@ -7,7 +7,7 @@ from flask import Flask
 from flask_swagger import swagger
 from jinja2 import FileSystemLoader
 from sqlalchemy import Connection, Engine, create_engine, select, text
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 
 from movie import services
 from movie.infrastructure.store import Base, IEventStore, SavedEvent, StreamEvent
@@ -19,8 +19,8 @@ class SqlAlchemyEventStore(IEventStore):
     def __init__(self, engine: Engine):
         self._engine = engine
 
-    def load_stream(self, stream_id: str):
-        stream_id_ = stream_id.replace("-", "")
+    def load_stream(self, stream_id: str | uuid.UUID):
+        stream_id_ = str(stream_id).replace("-", "")
         stream_uuid = uuid.UUID(stream_id_)
         stmt = select(SavedEvent).where(SavedEvent.stream_id == stream_uuid)
         with Session(self._engine) as session:
@@ -46,12 +46,11 @@ def create_app(config_file=None) -> Flask:
         with engine.connect() as conn:
             yield conn
 
-    Base.metadata.create_all(engine)
-
     ping = text('SELECT 1')
     services.register_factory(
         app, Connection, connection_factory, ping=lambda conn: conn.execute(ping), on_registry_close=engine.dispose
     )
+    services.register_factory(app, Session, sessionmaker(bind=engine))
 
     def event_store_factory():
         return SqlAlchemyEventStore(engine)
@@ -66,6 +65,8 @@ def create_app(config_file=None) -> Flask:
     app.register_blueprint(add_showing.bp)
     app.register_blueprint(view.bp)
     app.add_url_rule("/spec", "spec", lambda: swagger(app))
+    Base.metadata.create_all(engine)
+
     return app
 
 
