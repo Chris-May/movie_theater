@@ -1,15 +1,18 @@
 import atexit
 import tomllib
 import uuid
+from pathlib import Path
 
 from flask import Flask
 from flask_swagger import swagger
+from jinja2 import FileSystemLoader
 from sqlalchemy import Connection, Engine, create_engine, select, text
 from sqlalchemy.orm import Session
 
 from movie import services
 from movie.infrastructure.store import Base, IEventStore, SavedEvent, StreamEvent
 from movie.slices import add_movie, add_showing
+from movie.slices.showing_detail import view
 
 
 class SqlAlchemyEventStore(IEventStore):
@@ -36,6 +39,7 @@ def create_app(config_file=None) -> Flask:
     if config_file:
         app.config.from_file(config_file, load=tomllib.load, text=False)
     app = services.init_app(app)
+    app.jinja_options = dict(loader=FileSystemLoader(searchpath=list(Path(__file__).parents[1].rglob('templates'))))
     engine = create_engine(app.config['DATABASE_CONNECTION'])
 
     def connection_factory():
@@ -60,6 +64,7 @@ def create_app(config_file=None) -> Flask:
 
     app.register_blueprint(add_movie.bp)
     app.register_blueprint(add_showing.bp)
+    app.register_blueprint(view.bp)
     app.add_url_rule("/spec", "spec", lambda: swagger(app))
     return app
 
