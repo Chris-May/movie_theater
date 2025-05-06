@@ -40,6 +40,8 @@ def create_app(config_file=None) -> Flask:
         app.config.from_file(config_file, load=tomllib.load, text=False)
     app = services.init_app(app)
     app.jinja_options = dict(loader=FileSystemLoader(searchpath=list(Path(__file__).parents[1].rglob('templates'))))
+    app.static_folder = Path(__file__).parent / 'static'
+    app.static_url_path = '/static'
     engine = create_engine(app.config['DATABASE_CONNECTION'])
 
     def connection_factory():
