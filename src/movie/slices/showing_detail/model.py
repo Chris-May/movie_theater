@@ -55,10 +55,8 @@ class ShowingDetail(Base):
     def rows(self) -> Iterable[tuple[str, Iterable[str]]]:
         return it.groupby(self.all_seat_list, lambda x: x[0])
 
-    def get_color(self, seat: str):
-        if seat in self.reserved:
-            return 'black'
-        return '#bada55'
+    def seat_is_available(self, seat: str):
+        return seat in self.available
 
 
 def handle_showing_added(event: events.ShowingAdded):

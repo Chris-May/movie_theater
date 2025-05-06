@@ -1,16 +1,34 @@
 {% extends 'base.html' %}
 {% block content %}
+  <style>
+  svg circle {fill:#ddd}
+  input[name="selected_seats"]:checked + svg circle {fill:#bada55}
+  </style>
   <h1>{{ showing.movie_name }} at {{ showing.start_time.strftime('%I:%M %p') }}, <span class="text-sm">{{ showing.start_time.strftime('%m/%d/%y') }}</span></h1>
-  <div>
-  {{ showing.row }}
+  <form>
+  <div id="seats">
   {% for row in showing.rows %}
-    <div style="text-align: center">
+    <div style="display: flex; flex-direction: row; justify-content: center ;">
     {% for seat in row.1  %}
-      <svg id="seat-{{ seat }}" viewBox="0 0 2 2" fill="none" xmlns="http://www.w3.org/2000/svg" width="1em" style="display: inline-block;">
-      <circle r="1" cx="1" cy="1" fill="{{showing.get_color(seat)}}" />
+      <label>
+      {% if showing.seat_is_available(seat) %}
+        <input type="checkbox" name="selected_seats" value="{{seat}}" style="display: none">
+        {% endif %}
+      <svg id="seat-{{ seat }}"
+           viewBox="0 0 2 2"
+           fill="none"
+           xmlns="http://www.w3.org/2000/svg"
+           width="1em"
+           style="display: inline-block;"
+
+      >
+      <circle r="1" cx="1" cy="1" />
       </svg>
+      </label>
     {% endfor %}
     </div>
   {% endfor %}
+
   </div>
+  </form>
 {% endblock %}
