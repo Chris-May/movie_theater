@@ -66,7 +66,11 @@ def handle_showing_added(event: events.ShowingAdded):
         msg = f"Showing {showing_id} already exists"
         raise ValueError(msg)
     all_seats = event.available_seats
-    movie = Movie(*event_store.load_stream(event.movie_id))
+    event_stream = event_store.load_stream(event.movie_id)
+    if not event_stream:
+        msg = f"Movie {event.movie_id} does not exist"
+        raise ValueError(msg)
+    movie = Movie(*event_stream)
 
     row = ShowingDetail(
         showing_id=showing_id,
