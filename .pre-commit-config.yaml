@@ -31,3 +31,31 @@ repos:
     hooks:
       - id: uv-lock
       - id: uv-sync
+
+- repo: https://github.com/djlint/djLint
+  rev: v1.36.4
+  hooks:
+    - id: djlint-reformat
+    - id: djlint-reformat-jinja
+
+- repo: local
+  hooks:
+    - id: rustywind
+      name: rustywind Tailwind CSS class linter
+      language: node
+      additional_dependencies:
+        - rustywind@latest
+      entry: rustywind
+      args: [--write]
+      types_or: [html, jinja]
+
+- repo: local
+  hooks:
+    - id: compile-css
+      name: tailwind css compiler
+      language: node
+      additional_dependencies:
+        - tailwindcss@v3.4.14
+      entry: just compile-css
+      types: [html, jinja]
+      pass_filenames: false
