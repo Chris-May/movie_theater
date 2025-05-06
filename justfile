@@ -8,4 +8,4 @@ watch-css:
   #!/usr/bin/env bash
   set -euxo pipefail
   cd src/movie/web/static
-  npx @tailwindcss/cli -i build/css/init.css -o css/app.css --watch
+  npx @tailwindcss/cli -i _build/css/init.css -o css/app.css --watch
