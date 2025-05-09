@@ -1,5 +1,14 @@
 @layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
-@source "../../../**/templates/**/*.html";
-@source "../../../**/templates/**/*.jinja";
+@source "../../../../**/templates/**/*.html";
+
+svg.seat {
+  fill: #ddd;
+input[name="selected_seats"]:checked + & {fill:#bada55}
+
+  @variant dark {
+    fill: #888;
+      input[name="selected_seats"]:checked + & {fill:#bada55}
+  }
+}

@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from movie import services
 from movie.infrastructure.store import Base, IEventStore, SavedEvent, StreamEvent
-from movie.slices import add_movie, add_showing
+from movie.slices import add_movie, add_showing, reserve_ticket
 from movie.slices.showing_detail import view
 
 
@@ -66,6 +66,7 @@ def create_app(config_file=None) -> Flask:
     app.register_blueprint(add_movie.bp)
     app.register_blueprint(add_showing.bp)
     app.register_blueprint(view.bp)
+    app.register_blueprint(reserve_ticket.bp)
     app.add_url_rule("/spec", "spec", lambda: swagger(app))
     Base.metadata.create_all(engine)
 

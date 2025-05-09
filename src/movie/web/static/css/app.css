@@ -2,12 +2,9 @@
 @layer theme, base, components, utilities;
 @layer theme {
   :root, :host {
-    --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-    'Noto Color Emoji';
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
-    monospace;
-    --default-font-family: var(--font-sans);
-    --default-mono-font-family: var(--font-mono);
+    --spacing: 0.25rem;
+    --text-sm: 0.875rem;
+    --text-sm--line-height: calc(1.25 / 0.875);
   }
 }
 @layer utilities {
@@ -31,5 +28,33 @@
   }
   .block {
     display: block;
+  }
+  .grid {
+    display: grid;
+  }
+  .inline-block {
+    display: inline-block;
+  }
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .gap-4 {
+    gap: calc(var(--spacing) * 4);
+  }
+  .text-sm {
+    font-size: var(--text-sm);
+    line-height: var(--tw-leading, var(--text-sm--line-height));
+  }
+}
+svg.seat {
+  fill: #ddd;
+  input[name="selected_seats"]:checked + & {
+    fill: #bada55;
+  }
+  @media (prefers-color-scheme: dark) {
+    fill: #888;
+    input[name="selected_seats"]:checked + & {
+      fill: #bada55;
+    }
   }
 }
