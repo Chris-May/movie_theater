@@ -5,6 +5,9 @@ from movie.domain import events
 from movie.infrastructure.entity import Entity
 
 
+class UserID(UUID): ...
+
+
 class Movie(Entity):
     title: str
     duration: int
@@ -69,11 +72,11 @@ class Showing(Entity):
         showing.publish(event)
         return showing
 
-    def reserve_seats(self, *seat_ids):
+    def reserve_seats(self, user_id, *seat_ids):
         for seat in seat_ids:
             event = events.TicketReserved(
                 ticket_id=uuid4(),
-                user_id=uuid4(),
+                user_id=UUID(user_id),
                 seat_id=seat,
                 entity_id=self.id,
                 entity_version=self.version + 1,

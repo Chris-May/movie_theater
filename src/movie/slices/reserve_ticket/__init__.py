@@ -25,7 +25,7 @@ def reserve_ticket(showing_id: str):
         return flask.render_template(
             'showing_detail.html', showing=showing, error=f'These seats are unavailable: {unavailable_seats}'
         )
-    showing.reserve_seats(*requested_seats)
+    showing.reserve_seats(request.form['user'], *requested_seats)
     return dict(
         seats=request.form.getlist("selected_seats"),
         showing=showing_id,

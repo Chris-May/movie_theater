@@ -47,7 +47,7 @@
                 <p>{{ error }}</p>
             {% endif %}
             <h2>Select seats to purchase</h2>
-            <input type="hidden" name="user" value="test_user">
+            <input type="hidden" name="user" value="{{ user_id }}">
             <ul>
                 <template x-for="seat in selectedSeats">
                     <li x-text="seat"></li>

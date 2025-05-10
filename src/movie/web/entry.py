@@ -10,6 +10,7 @@ from sqlalchemy import Connection, Engine, create_engine, select, text
 from sqlalchemy.orm import Session, sessionmaker
 
 from movie import services
+from movie.domain.model import UserID
 from movie.infrastructure.event import DomainEvent
 from movie.infrastructure.store import Base, IEventStore, SavedEvent, StreamEvent
 from movie.slices import add_movie, add_showing, reserve_ticket
@@ -60,6 +61,7 @@ def create_app(config_file=None) -> Flask:
         app, Connection, connection_factory, ping=lambda conn: conn.execute(ping), on_registry_close=engine.dispose
     )
     services.register_factory(app, Session, sessionmaker(bind=engine))
+    services.register_value(app, UserID, uuid.UUID('00000000-0000-4000-8000-000000000000'))
 
     def event_store_factory():
         return SqlAlchemyEventStore(engine)
