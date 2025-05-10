@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Eligible Users for Giveaway</h1>
+    <p class="mb-4 text-gray-600">These users have reserved at least 5 tickets this month</p>
+    {% if users %}
+        <div class="grid gap-4">
+            {% for user in users %}
+                <div class="p-4 bg-white rounded-lg shadow">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="text-xl font-semibold">User {{ user.user_id }}</h2>
+                            <p class="text-gray-600">Tickets reserved: {{ user.ticket_count }}</p>
+                        </div>
+                        <div class="text-sm text-gray-500">Last updated: {{ user.last_updated.strftime("%Y-%m-%d %H:%M") }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="py-8 text-center">
+            <p class="text-gray-600">No eligible users found for this month</p>
+        </div>
+    {% endif %}
+{% endblock %}
