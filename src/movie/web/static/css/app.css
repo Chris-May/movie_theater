@@ -1,4 +1,5 @@
 /*! tailwindcss v4.1.5 | MIT License | https://tailwindcss.com */
+@layer properties;
 @layer theme, base, components, utilities;
 @layer theme {
   :root, :host {
@@ -44,20 +45,42 @@
   .gap-4 {
     gap: calc(var(--spacing) * 4);
   }
+  .border {
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+  }
   .text-sm {
     font-size: var(--text-sm);
     line-height: var(--tw-leading, var(--text-sm--line-height));
   }
 }
 svg.seat {
-  fill: #ddd;
+  fill: #eeedea;
+  &.taken {
+    fill: #f1f1f1;
+  }
   input[name="selected_seats"]:checked + & {
     fill: #bada55;
   }
   @media (prefers-color-scheme: dark) {
     fill: #888;
+    &.taken {
+      fill: #555;
+    }
     input[name="selected_seats"]:checked + & {
       fill: #bada55;
+    }
+  }
+}
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+    *, ::before, ::after, ::backdrop {
+      --tw-border-style: solid;
     }
   }
 }

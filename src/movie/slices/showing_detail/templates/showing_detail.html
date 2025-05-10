@@ -10,8 +10,9 @@
             {% for row in showing.rows %}
                 <div style="display: flex; flex-direction: row; justify-content: center ;">
                     {% for seat in row.1 %}
-                        <label>
-                            {% if showing.seat_is_available(seat) %}
+                        {% set is_available = showing.seat_is_available(seat) %}
+                        {% if is_available %}
+                            <label>
                                 <input type="checkbox"
                                        name="selected_seats"
                                        value="{{ seat }}"
@@ -23,15 +24,24 @@
                                  xmlns="http://www.w3.org/2000/svg"
                                  width="1em"
                                  style="display: inline-block"
-                                 class="seat">
-                                <circle r="1" cx="1" cy="1" />
+                                 class="seat{% if not is_available %} taken{% endif %}">
+                                {% if is_available %}
+                                    <circle r="1" cx="1" cy="1" />
+                                {% else %}
+                                    <circle r=".75" cx="1" cy="1" />
+                                    <line x1="0.125" y1="1.75" x2="1.75" y2="0.125" stroke="darkgrey" stroke-width="0.125" />
+                                {% endif %}
                             </svg>
-                        </label>
+                            {% if is_available %}</label>{% endif %}
                     {% endfor %}
                 </div>
             {% endfor %}
         </div>
         <div>
+            {% if error %}
+                <h2>There's an issure:</h2>
+                <p>{{ error }}</p>
+            {% endif %}
             <h2>Select seats to purchase</h2>
             <input type="hidden" name="user" value="test_user">
             <ul>
