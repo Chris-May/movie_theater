@@ -16,7 +16,6 @@ _event_handlers: dict[Callable, list[Callable]] = defaultdict(list)
 _subscriptions = {
     lambda e: isinstance(e, events.ShowingAdded): showing_detail_model.handle_showing_added,
     lambda e: isinstance(e, events.TicketReserved): showing_detail_model.handle_ticket_reserved,
-    lambda e: isinstance(e, events.TicketCancelled): showing_detail_model.handle_ticket_cancelled,
 }
 
 

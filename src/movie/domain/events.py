@@ -20,13 +20,12 @@ class ShowingAdded(DomainEvent):
     event_name: str = Field('ShowingAdded', frozen=True)
 
 
-class TicketCancelled:
-    pass
-
-
-class TicketReserved:
+class TicketReserved(DomainEvent):
     ticket_id: UUID
-    showing_id: UUID
     user_id: UUID
     seat_id: str
     event_name: str = Field('TicketReserved', frozen=True)
+
+    @property
+    def showing_id(self):
+        return self.entity_id

@@ -10,6 +10,7 @@ from sqlalchemy import Connection, Engine, create_engine, select, text
 from sqlalchemy.orm import Session, sessionmaker
 
 from movie import services
+from movie.infrastructure.event import DomainEvent
 from movie.infrastructure.store import Base, IEventStore, SavedEvent, StreamEvent
 from movie.slices import add_movie, add_showing, reserve_ticket
 from movie.slices.showing_detail import view
@@ -27,9 +28,13 @@ class SqlAlchemyEventStore(IEventStore):
             results = session.scalars(stmt).all()
         return [event.to_domain_event() for event in results]
 
-    def save(self, *events: StreamEvent):
+    def save(self, *events: StreamEvent | DomainEvent):
+        ensured_events = [
+            e if isinstance(e, StreamEvent) else StreamEvent(stream_id=e.entity_id, version=e.entity_version, event=e)
+            for e in events
+        ]
         with Session(self._engine) as session:
-            session.add_all([e.to_store() for e in events])
+            session.add_all([e.to_store() for e in ensured_events])
             session.commit()
 
 

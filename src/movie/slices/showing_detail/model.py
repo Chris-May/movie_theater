@@ -104,23 +104,3 @@ def handle_ticket_reserved(event: events.TicketReserved):
     row.available_seats = ShowingDetail.seats_to_str(available)
     row.reserved_seats = ShowingDetail.seats_to_str(reserved)
     session.commit()
-
-
-def handle_ticket_cancelled(event: events.TicketCancelled):
-    session = services.get(Session)
-    showing_id = str(event.showing_id)
-    row = session.query(ShowingDetail).filter_by(showing_id=showing_id).first()
-    if not row:
-        msg = f"Showing {showing_id} does not exist"
-        raise ValueError(msg)
-    seat = event.seat_id
-    available = ShowingDetail.str_to_seats(row.available_seats)
-    reserved = ShowingDetail.str_to_seats(row.reserved_seats)
-    if seat not in reserved:
-        msg = f"Seat {seat} is not reserved for showing {showing_id}"
-        raise ValueError(msg)
-    reserved.remove(seat)
-    available.append(seat)
-    row.available_seats = ShowingDetail.seats_to_str(available)
-    row.reserved_seats = ShowingDetail.seats_to_str(reserved)
-    session.commit()

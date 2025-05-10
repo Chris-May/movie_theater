@@ -64,7 +64,7 @@ class ConcurrentStreamWriteError(Exception):
 
 class IEventStore(abc.ABC):
     @abc.abstractmethod
-    def save(self, *stream_event: StreamEvent):
+    def save(self, *stream_event: StreamEvent | DomainEvent):
         raise NotImplementedError
 
     @abc.abstractmethod

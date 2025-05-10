@@ -5,7 +5,7 @@ import pytest
 from movie.web.entry import create_app
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def app():
     testing_settings = Path(__file__).parent / 'testing.toml'
     assert testing_settings.exists()
