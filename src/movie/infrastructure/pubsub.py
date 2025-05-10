@@ -17,13 +17,14 @@ _event_handlers: dict[Callable, list[Callable]] = defaultdict(list)
 _subscriptions = {
     lambda e: isinstance(e, events.ShowingAdded): showing_detail_model.handle_showing_added,
     lambda e: isinstance(e, events.TicketReserved): showing_detail_model.handle_ticket_reserved,
+    lambda e: isinstance(e, events.TicketReserved): now_playing.on_ticket_reserved,
     lambda e: isinstance(e, events.ShowingAdded): now_playing.on_new_showing,
     lambda e: isinstance(e, events.ShowingAdded): now_playing.on_ticket_reserved,
 }
 
 
 def publish(event: DomainEvent):
-    """Publish a domain events to all subscribers.
+    """Publish a domain event to all subscribers.
 
     The event is first persisted, then sent to all matching subscribers.
     Each subscriber receives the events only once.
