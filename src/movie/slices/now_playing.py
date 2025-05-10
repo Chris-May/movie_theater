@@ -78,7 +78,7 @@ def on_ticket_reserved(event: events.TicketReserved):
     :return:
     """
     session = services.get(Session)
-    showing_id = str(event.showing_id)
+    showing_id = str(event.entity_id)
 
     # Get the showing from the read model
     row = session.query(NowPlayingReadModel).filter_by(showing_id=showing_id).first()

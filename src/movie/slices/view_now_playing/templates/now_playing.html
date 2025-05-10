@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Now Playing</title>
+        <style>
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+        .movie-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .movie-poster {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+        .movie-info {
+            padding: 1rem;
+        }
+        .movie-title {
+            font-size: 1.5rem;
+            margin: 0 0 0.5rem 0;
+        }
+        .showing-time {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        .tickets {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+        .book-button {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #1976d2;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+        .book-button:hover {
+            background-color: #1565c0;
+        }
+        .showing-list {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        .showing-item {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .showing-item:last-child {
+            margin-bottom: 0;
+        }
+        </style>
+    </head>
+    <body>
+        <h1 style="text-align: center; margin: 2rem 0;">Now Playing</h1>
+        <div class="movie-grid">
+            {% for movie_title, showings in movies %}
+                <div class="movie-card">
+                    <img src="{{ showings[0].movie_poster_url }}"
+                         alt="{{ movie_title }}"
+                         class="movie-poster">
+                    <div class="movie-info">
+                        <h2 class="movie-title">{{ movie_title }}</h2>
+                        <div class="showing-list">
+                            {% for showing in showings %}
+                                <div class="showing-item">
+                                    <div class="showing-time">Showing at: {{ showing.showing_time.strftime("%B %d, %Y at %I:%M %p") }}</div>
+                                    <div class="tickets">Tickets remaining: {{ showing.tickets_remaining }}</div>
+                                    <a href="/showing/{{ showing.showing_id }}" class="book-button">Book Tickets</a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </body>
+</html>

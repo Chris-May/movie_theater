@@ -14,6 +14,7 @@ from movie.infrastructure.event import DomainEvent
 from movie.infrastructure.store import Base, IEventStore, SavedEvent, StreamEvent
 from movie.slices import add_movie, add_showing, reserve_ticket
 from movie.slices.showing_detail import view
+from movie.slices.view_now_playing import view as view_now_playing
 
 
 class SqlAlchemyEventStore(IEventStore):
@@ -72,6 +73,7 @@ def create_app(config_file=None) -> Flask:
     app.register_blueprint(add_showing.bp)
     app.register_blueprint(view.bp)
     app.register_blueprint(reserve_ticket.bp)
+    app.register_blueprint(view_now_playing.bp)
     app.add_url_rule("/spec", "spec", lambda: swagger(app))
     Base.metadata.create_all(engine)
 
