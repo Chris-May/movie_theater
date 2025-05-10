@@ -79,7 +79,7 @@
         <mxCell id="vuQsww0IuLCk6k9ByEk7-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="vuQsww0IuLCk6k9ByEk7-1" target="vuQsww0IuLCk6k9ByEk7-20" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="vuQsww0IuLCk6k9ByEk7-1" value="Movie added&lt;div&gt;movie_id&lt;/div&gt;&lt;div&gt;movie_name&lt;/div&gt;&lt;div&gt;movie_poster&lt;/div&gt;&lt;div&gt;duration&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+        <mxCell id="vuQsww0IuLCk6k9ByEk7-1" value="&lt;b&gt;Movie added&lt;/b&gt;&lt;div&gt;movie_id&lt;/div&gt;&lt;div&gt;movie_name&lt;/div&gt;&lt;div&gt;movie_poster&lt;/div&gt;&lt;div&gt;duration&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
           <mxGeometry x="-307" y="262" width="120" height="85" as="geometry" />
         </mxCell>
         <mxCell id="vuQsww0IuLCk6k9ByEk7-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;" parent="1" source="vuQsww0IuLCk6k9ByEk7-2" target="vuQsww0IuLCk6k9ByEk7-33" edge="1">
