@@ -8,4 +8,4 @@ bp = flask.Blueprint('giveaway_view', __name__)
 @bp.get('/giveaway/eligible')
 def eligible_users():
     users = get_eligible_users()
-    return flask.render_template('giveaway/eligible.html', users=users)
+    return flask.render_template('eligible.html', users=users)

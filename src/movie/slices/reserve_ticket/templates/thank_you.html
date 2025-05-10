@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Thank you</h1>
+    <p>You have purchased {{ selected_seats | list }}</p>
+    <p>See you at {{ start_time }}</p>
+{% endblock %}
