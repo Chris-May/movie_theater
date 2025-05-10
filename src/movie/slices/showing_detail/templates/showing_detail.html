@@ -5,7 +5,11 @@
     </h1>
     <form class="grid grid-cols-2 gap-4"
           method="post"
-          x-data="{selectedSeats:[]}">
+          x-data="{selectedSeats:[]}"
+          hx-select="#seats"
+          hx-get="/showing/{{ showing.showing_id }}"
+          hx-trigger="every 1s"
+          hx-target="#seats">
         <div id="seats">
             {% for row in showing.rows %}
                 <div style="display: flex; flex-direction: row; justify-content: center ;">
