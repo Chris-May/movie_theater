@@ -1,5 +1,6 @@
 import random
 
+import pytest
 import svcs
 from sqlalchemy.orm import Session
 
@@ -9,16 +10,17 @@ from movie.infrastructure.store import IEventStore
 from tests.factories import MovieAddedFactory, ShowingAddedFactory, TicketReservedFactory
 
 
-def test__showing_added__creates_row():
+@pytest.mark.asyncio
+async def test__showing_added__creates_row():
     # GIVEN a projector and a ShowingAdded event
-    session, event_store = svcs.flask.get(Session, IEventStore)
+    session, event_store = svcs.quart.get(Session, IEventStore)
     movie_created = MovieAddedFactory.build()
     movie = Movie(movie_created)
-    event_store.save(movie_created)
+    await event_store.save(movie_created)
     event = ShowingAddedFactory.build(movie_id=movie.movie_id)
 
     # WHEN the event is handled
-    showing_detail_model.handle_showing_added(event)
+    await showing_detail_model.handle_showing_added(event)
 
     # THEN a row is created with correct data
     row = session.query(showing_detail_model.ShowingDetail).filter_by(showing_id=str(event.entity_id)).first()
@@ -32,20 +34,21 @@ def test__showing_added__creates_row():
     assert row.all_seats == ','.join(event.available_seats)
 
 
-def test__ticket_reserved__moves_seat():
+@pytest.mark.asyncio
+async def test__ticket_reserved__moves_seat():
     # GIVEN a showing row and a TicketReserved showing_added
-    session, event_store = svcs.flask.get(Session, IEventStore)
+    session, event_store = svcs.quart.get(Session, IEventStore)
     movie_created = MovieAddedFactory.build()
     movie = Movie(movie_created)
-    event_store.save(movie_created)
+    await event_store.save(movie_created)
     showing_added = ShowingAddedFactory.build(movie_id=movie.movie_id)
-    event_store.save(movie_created, showing_added)
-    showing_detail_model.handle_showing_added(showing_added)
+    await event_store.save(movie_created, showing_added)
+    await showing_detail_model.handle_showing_added(showing_added)
 
     # When we reserve a seat
     seat = random.choice(showing_added.available_seats)  # noqa: S311
     reserve_event = TicketReservedFactory.build(entity_id=showing_added.entity_id, seat_id=seat)
-    showing_detail_model.handle_ticket_reserved(reserve_event)
+    await showing_detail_model.handle_ticket_reserved(reserve_event)
 
     # THEN the seat is moved to reserved
     row = session.query(showing_detail_model.ShowingDetail).filter_by(showing_id=str(showing_added.entity_id)).first()

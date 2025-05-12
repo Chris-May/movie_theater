@@ -59,7 +59,7 @@ class ShowingDetail(Base):
         return seat in self.available
 
 
-def handle_showing_added(event: events.ShowingAdded):
+async def handle_showing_added(event: events.ShowingAdded):
     session, event_store = services.get(Session, IEventStore)
     showing_id = str(event.entity_id)
     if session.query(ShowingDetail).filter_by(showing_id=showing_id).first():
@@ -86,7 +86,7 @@ def handle_showing_added(event: events.ShowingAdded):
     session.commit()
 
 
-def handle_ticket_reserved(event: events.TicketReserved):
+async def handle_ticket_reserved(event: events.TicketReserved):
     session = services.get(Session)
     showing_id = str(event.showing_id)
     row = session.query(ShowingDetail).filter_by(showing_id=showing_id).first()

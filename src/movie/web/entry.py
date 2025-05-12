@@ -3,9 +3,9 @@ import tomllib
 import uuid
 from pathlib import Path
 
-from flask import Flask
-from flask_swagger import swagger
+import quart_flask_patch  # noqa: F401
 from jinja2 import FileSystemLoader
+from quart import Quart
 from sqlalchemy import Connection, Engine, create_engine, select, text
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -31,7 +31,7 @@ class SqlAlchemyEventStore(IEventStore):
             results = session.scalars(stmt).all()
         return [event.to_domain_event() for event in results]
 
-    def save(self, *events: StreamEvent | DomainEvent):
+    async def save(self, *events: StreamEvent | DomainEvent):
         ensured_events = [
             e if isinstance(e, StreamEvent) else StreamEvent(stream_id=e.entity_id, version=e.entity_version, event=e)
             for e in events
@@ -41,8 +41,8 @@ class SqlAlchemyEventStore(IEventStore):
             session.commit()
 
 
-def create_app(config_file=None) -> Flask:
-    app = Flask(__name__)
+def create_app(config_file=None) -> Quart:
+    app = Quart(__name__)
     app.config.from_object('movie.default_settings')
     if config_file:
         app.config.from_file(config_file, load=tomllib.load, text=False)
@@ -78,7 +78,6 @@ def create_app(config_file=None) -> Flask:
     app.register_blueprint(reserve_ticket.bp)
     app.register_blueprint(view_now_playing.bp)
     app.register_blueprint(giveaway_view.bp)
-    app.add_url_rule("/spec", "spec", lambda: swagger(app))
     Base.metadata.create_all(engine)
 
     return app

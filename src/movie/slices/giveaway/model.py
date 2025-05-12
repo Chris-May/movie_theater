@@ -28,7 +28,7 @@ class UserTicketCount(Base):
         )
 
 
-def handle_ticket_reserved(event: events.TicketReserved):
+async def handle_ticket_reserved(event: events.TicketReserved):
     session = services.get(Session)
     user_id = str(event.user_id)
     current_month = datetime.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)  # noqa: DTZ005
@@ -46,7 +46,7 @@ def handle_ticket_reserved(event: events.TicketReserved):
     session.commit()
 
 
-def get_eligible_users():
+async def get_eligible_users():
     """Returns a list of users who have reserved at least 5 tickets this month"""
     session = services.get(Session)
     current_month = datetime.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)  # noqa: DTZ005

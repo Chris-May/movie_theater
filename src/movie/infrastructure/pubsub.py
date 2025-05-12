@@ -25,7 +25,7 @@ _subscriptions = {
 }
 
 
-def publish(event: DomainEvent):
+async def publish(event: DomainEvent):
     """Publish a domain event to all subscribers.
 
     The event is first persisted, then sent to all matching subscribers.
@@ -37,7 +37,7 @@ def publish(event: DomainEvent):
             event_store = services.get(IEventStore)
             conditioned = StreamEvent(stream_id=event.entity_id, version=event.entity_version, event=event)
             logger.info('saving event %s %s', conditioned.event.event_name, conditioned.stream_id)
-            event_store.save(conditioned)
+            await event_store.save(conditioned)
 
             # Then notify subscribers
             matching_handlers = []
@@ -49,7 +49,7 @@ def publish(event: DomainEvent):
 
             for handler in matching_handlers:
                 if inspect.iscoroutinefunction(handler):
-                    handler(event)
+                    await handler(event)
                 else:
                     handler(event)
 

@@ -25,12 +25,12 @@ class Movie(Entity):
         return self.id
 
     @classmethod
-    def create(cls, name, duration, poster_url):
+    async def create(cls, name, duration, poster_url):
         event = events.MovieAdded(
             movie_name=name, duration=duration, movie_poster=poster_url, entity_id=uuid4(), entity_version=1
         )
         movie = cls(event)
-        movie.publish(event)
+        await movie.publish(event)
         return movie
 
     def _on_creation(self, event: events.MovieAdded):
@@ -60,7 +60,7 @@ class Showing(Entity):
         return self.id
 
     @classmethod
-    def create(cls, movie_id, start_time, available_seats):
+    async def create(cls, movie_id, start_time, available_seats):
         event = events.ShowingAdded(
             movie_id=movie_id,
             start_time=start_time,
@@ -69,10 +69,10 @@ class Showing(Entity):
             entity_version=1,
         )
         showing = cls(event)
-        showing.publish(event)
+        await showing.publish(event)
         return showing
 
-    def reserve_seats(self, user_id, *seat_ids):
+    async def reserve_seats(self, user_id, *seat_ids):
         for seat in seat_ids:
             event = events.TicketReserved(
                 ticket_id=uuid4(),
@@ -81,7 +81,7 @@ class Showing(Entity):
                 entity_id=self.id,
                 entity_version=self.version + 1,
             )
-            self.publish(event)
+            await self.publish(event)
 
     def _on_creation(self, event: events.ShowingAdded):
         self.movie_id = event.movie_id

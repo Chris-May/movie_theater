@@ -20,11 +20,11 @@ class Entity:
     def increment_version(self):
         self.version += 1
 
-    def publish(self, event: DomainEvent):
+    async def publish(self, event: DomainEvent):
         from .pubsub import publish
 
         self.apply(event)
-        publish(event)
+        await publish(event)
 
     @singledispatchmethod
     def apply(self, event):

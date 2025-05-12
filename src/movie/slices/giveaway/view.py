@@ -1,11 +1,11 @@
-import flask
+import quart
 
 from movie.slices.giveaway.model import get_eligible_users
 
-bp = flask.Blueprint('giveaway_view', __name__)
+bp = quart.Blueprint('giveaway_view', __name__)
 
 
 @bp.get('/giveaway/eligible')
-def eligible_users():
-    users = get_eligible_users()
-    return flask.render_template('eligible.html', users=users)
+async def eligible_users():
+    users = await get_eligible_users()
+    return await quart.render_template('eligible.html', users=users)

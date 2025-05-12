@@ -34,7 +34,7 @@ class NowPlayingReadModel(Base):
         )
 
 
-def on_new_showing(event: events.ShowingAdded):
+async def on_new_showing(event: events.ShowingAdded):
     """
     This function is called when a new showing is added to the system.
     It updates the read model to power the now showing page.
@@ -70,7 +70,7 @@ def on_new_showing(event: events.ShowingAdded):
     session.commit()
 
 
-def on_ticket_reserved(event: events.TicketReserved):
+async def on_ticket_reserved(event: events.TicketReserved):
     """
     This function is called when a ticket is reserved for a showing.
     It updates the tickets_remaining count in the now playing read model.

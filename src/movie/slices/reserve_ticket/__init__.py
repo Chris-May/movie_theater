@@ -1,18 +1,19 @@
 from uuid import UUID
 
-import flask
-from flask import request
+import quart
+from quart import request
 
 from movie.domain.repos import ShowingRepo
 
-bp = flask.Blueprint("reserve_ticket", __name__)
+bp = quart.Blueprint("reserve_ticket", __name__)
 
 
 @bp.post('/showing/<string:showing_id>')
-def reserve_ticket(showing_id: str):
-    showing = ShowingRepo().get_showing(UUID(showing_id))
+async def reserve_ticket(showing_id: str):
+    showing = await ShowingRepo().get_showing(UUID(showing_id))
     available_seats = set(showing.available_seats)
-    requested_seats = set(request.form.getlist("selected_seats"))
+    form = await request.form
+    requested_seats = set(form.getlist("selected_seats"))
     if not requested_seats.issubset(available_seats):
         from sqlalchemy.orm import Session
 
@@ -22,17 +23,10 @@ def reserve_ticket(showing_id: str):
         session = services.get(Session)
         showing = session.query(ShowingDetail).filter_by(showing_id=showing_id).one_or_none()
         unavailable_seats = requested_seats - available_seats
-        return flask.render_template(
+        return await quart.render_template(
             'showing_detail.html', showing=showing, error=f'These seats are unavailable: {unavailable_seats}'
         )
-    showing.reserve_seats(request.form['user'], *requested_seats)
-    return flask.render_template(
-        'thank_you.html', user=request.form['user'], selected_seats=requested_seats, start_time=showing.start_time
-    )
-    return dict(
-        seats=request.form.getlist("selected_seats"),
-        showing=showing_id,
-        form=request.form,
-        user=request.form['user'],
-        available_seats=showing.available_seats,
+    showing.reserve_seats(form['user'], *requested_seats)
+    return await quart.render_template(
+        'thank_you.html', user=form['user'], selected_seats=requested_seats, start_time=showing.start_time
     )
