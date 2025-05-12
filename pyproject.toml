@@ -8,6 +8,7 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "datastar-py>=0.4.3",
     "flask>=3.1.0",
     "flask-swagger>=0.2.14",
     "pydantic>=2.11.4",

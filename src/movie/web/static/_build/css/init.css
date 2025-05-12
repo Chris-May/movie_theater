@@ -11,7 +11,7 @@ svg.seat {
         fill: #f1f1f1;
     }
 
-    input[name="selected_seats"]:checked + & {
+    input[name="selected_seats"]:checked:not(:disabled) + & {
         fill: #bada55
     }
 
@@ -22,7 +22,7 @@ svg.seat {
             fill: #555;
         }
 
-        input[name="selected_seats"]:checked + & {
+        input[name="selected_seats"]:checked:not(:disabled) + & {
             fill: #bada55
         }
     }
