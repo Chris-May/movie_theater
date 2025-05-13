@@ -7,7 +7,7 @@ import quart_flask_patch  # noqa: F401
 from jinja2 import FileSystemLoader
 from quart import Quart
 from sqlalchemy import Connection, Engine, create_engine, select, text
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import Session
 
 from movie import services
 from movie.domain.model import UserID
@@ -56,11 +56,15 @@ def create_app(config_file=None) -> Quart:
         with engine.connect() as conn:
             yield conn
 
+    def session_factory():
+        with Session(engine) as session:
+            yield session
+
     ping = text('SELECT 1')
     services.register_factory(
         app, Connection, connection_factory, ping=lambda conn: conn.execute(ping), on_registry_close=engine.dispose
     )
-    services.register_factory(app, Session, sessionmaker(bind=engine))
+    services.register_factory(app, Session, session_factory)
     services.register_value(app, UserID, uuid.UUID('00000000-0000-4000-8000-000000000000'))
 
     def event_store_factory():
