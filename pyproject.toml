@@ -8,7 +8,6 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
-    "datastar-py>=0.4.3",
     "flask-swagger>=0.2.14",
     "quart>=0.19.0",
     "pydantic>=2.11.4",
@@ -16,7 +15,11 @@ dependencies = [
     "svcs>=25.1.0",
     "uvicorn[standard]>=0.34.2",
     "quart-flask-patch>=0.3.0",
+    'datastar-py'
 ]
+
+[tool.uv.sources]
+datastar-py = { git = "https://github.com/starfederation/datastar", subdirectory = "sdk/python" }
 
 [project.scripts]
 movie = "movie:main"

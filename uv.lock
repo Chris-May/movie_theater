@@ -84,12 +84,8 @@ wheels = [
 
 [[package]]
 name = "datastar-py"
-version = "0.4.3"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/41/7b/68c1440f9fe092d462d1e6fa8f10bd9b68ac81422423d8176d6cfeafb87d/datastar_py-0.4.3.tar.gz", hash = "sha256:1b74dd0a0ed184a8df4049caf8a6827e60a18bf97a80cc8d676422630b7e2fde", size = 66465, upload-time = "2025-03-07T14:55:04.216Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/f4/c6/b34230cb1ab97f28e1d384261067e9962fd658e12141ec9c412c3200ca8e/datastar_py-0.4.3-py3-none-any.whl", hash = "sha256:97fce29952a5d2ba49705a2c65fd4b20a0ebd81c88dab469c85428a27c0ddf4c", size = 6875, upload-time = "2025-03-07T14:55:02.853Z" },
-]
+version = "0.4.2"
+source = { git = "https://github.com/starfederation/datastar?subdirectory=sdk%2Fpython#36d78327c5ee3781329bc2d57cb25adafaf27f0d" }
 
 [[package]]
 name = "distlib"
@@ -369,7 +365,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "datastar-py", specifier = ">=0.4.3" },
+    { name = "datastar-py", git = "https://github.com/starfederation/datastar?subdirectory=sdk%2Fpython" },
     { name = "flask-swagger", specifier = ">=0.2.14" },
     { name = "pydantic", specifier = ">=2.11.4" },
     { name = "quart", specifier = ">=0.19.0" },
