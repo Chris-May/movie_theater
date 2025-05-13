@@ -3,18 +3,11 @@
     <h1>
         {{ showing.movie_name }} at {{ showing.start_time.strftime("%I:%M %p") }}, <span class="text-sm">{{ showing.start_time.strftime("%m/%d/%y") }}</span>
     </h1>
-    <script>
-  function updateSelectedSeats(el) {
-            // Get all checked checkboxes and update the selectedSeats array
-            const checkboxes = el.querySelectorAll('input[type="checkbox"]:checked');
-            console.log(checkboxes);
-            this.selectedSeats = Array.from(checkboxes).map(checkbox => checkbox.value);
-        }
-    </script>
     <form class="grid grid-cols-2 gap-4"
           method="post"
-          data-signals="{selectedSeats: [], reservedSeats: []}"
+          data-signals="{selectedSeats: {{ showing.selected_dict }}, reservedSeats: {{ showing.reserved_list }}}"
           data-on-load="@get('/showing/{{ showing.showing_id }}/updates')">
+        <pre data-text="ctx.signals.JSON()">Signals</pre>
         <div id="seats">
             {% for row in showing.rows %}
                 <div style="display: flex; flex-direction: row; justify-content: center ;">
@@ -24,9 +17,9 @@
                             <input type="checkbox"
                                    name="selected_seats"
                                    value="{{ seat }}"
-                                   data-bind="$selected-seats.{{ seat }}"
+                                   data-bind="selectedSeats.{{ seat.upper() }}"
                                    x-model="selectedSeats"
-                                   {% if not is_available %}disabled{% endif %}
+                                   data-attr="{disabled:$reservedSeats.indexOf('{{ seat.upper() }}')>-1}"
                                    style="display: none">
                             <svg id="seat-{{ seat }}"
                                  viewBox="0 0 2 2"
@@ -34,12 +27,8 @@
                                  width="1em"
                                  style="display: inline-block"
                                  class="seat{% if not is_available %} taken{% endif %}">
-                                {% if is_available %}
-                                    <circle r="1" cx="1" cy="1" />
-                                {% else %}
-                                    <circle r=".75" cx="1" cy="1" />
-                                    <line x1="0.125" y1="1.75" x2="1.75" y2="0.125" stroke="darkgrey" stroke-width="0.125" />
-                                {% endif %}
+                                <circle r=".75" cx="1" cy="1" />
+                                <line x1="0.125" y1="1.75" x2="1.75" y2="0.125" stroke="darkgrey" stroke-width="0.125" data-show="$reservedSeats.indexOf('{{ seat }}')>-1" />
                             </svg>
                         </label>
                     {% endfor %}

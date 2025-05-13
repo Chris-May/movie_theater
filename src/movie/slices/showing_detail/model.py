@@ -1,4 +1,5 @@
 import itertools as it
+import json
 from collections.abc import Iterable
 
 from sqlalchemy import Column, DateTime, Integer, String
@@ -52,11 +53,19 @@ class ShowingDetail(Base):
         return set(self.reserved_seats.split(','))
 
     @property
+    def reserved_list(self) -> list[str]:
+        return self.reserved_seats.split(',')
+
+    @property
     def rows(self) -> Iterable[tuple[str, Iterable[str]]]:
         return it.groupby(self.all_seat_list, lambda x: x[0])
 
     def seat_is_available(self, seat: str):
         return seat in self.available
+
+    @property
+    def selected_dict(self):
+        return json.dumps({seat: False for seat in self.all_seat_list})
 
 
 async def handle_showing_added(event: events.ShowingAdded):

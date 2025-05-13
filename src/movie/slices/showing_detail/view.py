@@ -16,21 +16,19 @@ bp = quart.Blueprint('detail_showing_view', __name__)
 
 @bp.get('/showing/<string:showing_id>')
 async def showing_detail(showing_id):
-    selected_seats, showing, user_id, _ = await showing_info(showing_id)
-    return await quart.render_template(
-        'showing_detail.html', showing=showing, user_id=user_id, selected_seats=selected_seats
-    )
-
-
-async def get_showing(showing_id):
-    session = services.get(Session)
-    showing = session.query(ShowingDetail).filter_by(showing_id=showing_id).one_or_none()
     user_id = services.get(UserID)
-    return showing, user_id
+    showing = await get_showing(showing_id)
+    return await quart.render_template('showing_detail.html', showing=showing, user_id=user_id)
+
+
+async def get_showing(showing_id) -> ShowingDetail:
+    session = services.get(Session)
+    return session.query(ShowingDetail).filter_by(showing_id=showing_id).scalar()
 
 
 async def showing_info(showing_id):
-    showing, user_id = await get_showing(showing_id)
+    showing = await get_showing(showing_id)
+    user_id = services.get(UserID)
     datastar_stuff = json.loads((await request.values).get('datastar', '{}'))
     selected_seats = {key for key, val in datastar_stuff.get('selected-seats', {}).items() if val} - set(
         showing.reserved_seats
@@ -45,9 +43,10 @@ async def detail_updates(showing_id):
     async def updates():
         while True:
             async with app.app_context():
-                showing, _ = await get_showing(showing_id)
-                yield ServerSentEventGenerator.merge_signals(dict(reservedSeats=showing.reserved_seats))
-                await asyncio.sleep(10)
+                showing = await get_showing(showing_id)
+                reserved_seats = showing.reserved_seats.split(',') if showing.reserved_seats else []
+                yield ServerSentEventGenerator.merge_signals(dict(reservedSeats=reserved_seats))
+                await asyncio.sleep(1)
 
     response = await make_datastar_response(updates())
     response.timeout = None
