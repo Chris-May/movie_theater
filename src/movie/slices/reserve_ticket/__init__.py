@@ -26,7 +26,7 @@ async def reserve_ticket(showing_id: str):
         return await quart.render_template(
             'showing_detail.html', showing=showing, error=f'These seats are unavailable: {unavailable_seats}'
         )
-    showing.reserve_seats(form['user'], *requested_seats)
+    await showing.reserve_seats(form['user'], *requested_seats)
     return await quart.render_template(
         'thank_you.html', user=form['user'], selected_seats=requested_seats, start_time=showing.start_time
     )
