@@ -3,6 +3,7 @@ from uuid import UUID
 import quart
 from quart import request
 
+from movie.domain.model import UserID
 from movie.domain.repos import ShowingRepo
 
 bp = quart.Blueprint("reserve_ticket", __name__)
@@ -20,11 +21,14 @@ async def reserve_ticket(showing_id: str):
         from movie import services
         from movie.slices.showing_detail.model import ShowingDetail
 
-        session = services.get(Session)
+        session, user_id = services.get(Session, UserID)
         showing = session.query(ShowingDetail).filter_by(showing_id=showing_id).one_or_none()
         unavailable_seats = requested_seats - available_seats
         return await quart.render_template(
-            'showing_detail.html', showing=showing, error=f'These seats are unavailable: {unavailable_seats}'
+            'showing_detail.html',
+            showing=showing,
+            user_id=user_id,
+            error=f'These seats are unavailable: {unavailable_seats}',
         )
     await showing.reserve_seats(form['user'], *requested_seats)
     return await quart.render_template(
