@@ -9,11 +9,12 @@ from quart import Quart
 from sqlalchemy import Connection, Engine, create_engine, select, text
 from sqlalchemy.orm import Session
 
+import movie.slices.reserve_ticket.view
 from movie import services
 from movie.domain.model import UserID
 from movie.infrastructure.event import DomainEvent
 from movie.infrastructure.store import Base, IEventStore, SavedEvent, StreamEvent
-from movie.slices import add_movie, add_showing, reserve_ticket
+from movie.slices import add_movie, add_showing
 from movie.slices.giveaway import view as giveaway_view
 from movie.slices.showing_detail import view
 from movie.slices.view_now_playing import view as view_now_playing
@@ -79,7 +80,7 @@ def create_app(config_file=None) -> Quart:
     app.register_blueprint(add_movie.bp)
     app.register_blueprint(add_showing.bp)
     app.register_blueprint(view.bp)
-    app.register_blueprint(reserve_ticket.bp)
+    app.register_blueprint(movie.slices.reserve_ticket.view.bp)
     app.register_blueprint(view_now_playing.bp)
     app.register_blueprint(giveaway_view.bp)
     Base.metadata.create_all(engine)
