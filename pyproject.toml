@@ -30,6 +30,7 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
+    "httpx>=0.28.1",
     "polyfactory>=2.21.0",
     "pre-commit>=4.2.0",
     "pytest>=8.3.5",
