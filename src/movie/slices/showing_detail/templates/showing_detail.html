@@ -11,36 +11,11 @@
   }
     </script>
     <form class="grid grid-cols-2 gap-4"
-        method="post"
-        data-signals="{selectedSeats: [], reservedSeats: {{ showing.reserved_list }}, chosenSeats: ''}"
-        data-on-load="@get('/showing/{{ showing.showing_id }}/updates')"
-        {#    data-on-change="console.log(evt);@get('/showing/{{ showing.showing_id }}/seats')"#}
-        data-on-change="@get('/showing/{{ showing.showing_id }}/seats?seats='+getFormData(evt))"
-        >
-        <div id="seats">
-            {% for row in showing.rows %}
-                <div style="display: flex; flex-direction: row; justify-content: center ;">
-                    {% for seat in row.1 %}
-                        <label>
-                            <input type="checkbox"
-                                   name="selected_seats"
-                                   value="{{ seat }}"
-                                   data-attr="{ disabled:$reservedSeats.indexOf('{{ seat.upper() }}')>-1, checked:$selectedSeats.indexOf('{{ seat.upper() }}')>-1}"
-                                   style="display: none">
-                            <svg id="seat-{{ seat }}"
-                                 viewBox="0 0 2 2"
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 width="1em"
-                                 style="display: inline-block"
-                                 class="seat{% if not is_available %} taken{% endif %}">
-                                <circle data-attr-r="$reservedSeats.indexOf('{{ seat.upper() }}')>-1 ? .75 : 1" cx="1" cy="1" />
-                                <line x1="0.125" y1="1.75" x2="1.75" y2="0.125" stroke="darkgrey" stroke-width="0.125" data-show="$reservedSeats.indexOf('{{ seat }}')>-1" />
-                            </svg>
-                        </label>
-                    {% endfor %}
-                </div>
-            {% endfor %}
-        </div>
+          method="post"
+          data-signals="{reservedSeats: {{ showing.reserved_list }}}"
+          data-on-load="@get('/showing/{{ showing.showing_id }}/updates')"
+          data-on-change="@get('/showing/{{ showing.showing_id }}/seats?seats='+getFormData(evt))">
+        {% include '_seat.html' %}
         <div>
             {% if error %}
                 <h2>There's an issue:</h2>
@@ -50,7 +25,6 @@
             <input type="hidden" name="user" value="{{ user_id }}">
             <ul id="seat-list">
             </ul>
-            <pre data-text="ctx.signals.JSON()">Signals</pre>
             <button type="submit" class="btn btn-primary">Purchase</button>
         </div>
     </form>

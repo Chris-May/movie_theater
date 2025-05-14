@@ -57,7 +57,7 @@ class ShowingDetail(Base):
         return it.groupby(self.all_seat_list, lambda x: x[0])
 
     def seat_is_available(self, seat: str):
-        return seat in self.available
+        return seat not in self.reserved_list
 
     @property
     def selected_dict(self):
