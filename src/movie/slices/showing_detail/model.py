@@ -49,10 +49,6 @@ class ShowingDetail(Base):
         return set(self.available_seats.split(','))
 
     @property
-    def reserved(self) -> set[str]:
-        return set(self.reserved_seats.split(','))
-
-    @property
     def reserved_list(self) -> list[str]:
         return self.reserved_seats.split(',')
 
