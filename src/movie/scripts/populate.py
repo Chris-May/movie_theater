@@ -1,5 +1,6 @@
 import asyncio
-from datetime import datetime, time
+import calendar
+from datetime import date, datetime, time
 from pathlib import Path
 
 import httpx
@@ -17,6 +18,7 @@ movies = (
         'https://s.studiobinder.com/wp-content/uploads/2017/12/Movie-Poster-Template-Dark-with-Image.jpg?x81279',
     ),
 )
+times = (time(19, 15), time(19, 20), time(19, 30), time(20, 50), time(21, 00), time(21, 10))
 
 
 project_root = next(p for p in Path(__file__).parents if (p / '.git').exists())
@@ -173,9 +175,13 @@ async def main():
     semaphore = asyncio.Semaphore(10)
     client = httpx.AsyncClient(base_url="http://localhost:5001")
     movie_ids = [await add_movie(movie[0], movie[1], movie[2], client) for movie in movies]
-    times = (time(19, 15), time(19, 20), time(19, 30), time(20, 50), time(21, 00), time(21, 10))
-    start_times = [datetime.combine(datetime.today(), t) for t in times]  # noqa: DTZ002
-    movie_times = zip([*movie_ids, *movie_ids], start_times, strict=True)
+    this_year = datetime.today().year
+    this_month = datetime.today().month
+    _, days_this_month = calendar.monthrange(datetime.today().year, datetime.today().month)
+    start_times = []
+    for day in range(1, days_this_month + 1):
+        start_times.extend([datetime.combine(date(this_year, this_month, day), t) for t in times])
+    movie_times = list(zip(movie_ids * (len(start_times) // len(movie_ids)), start_times, strict=True))
     await asyncio.gather(
         *[add_showing(movie_id, start_time, client, semaphore) for movie_id, start_time in movie_times]
     )

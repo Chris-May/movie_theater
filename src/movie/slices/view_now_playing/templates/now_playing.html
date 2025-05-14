@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Now Playing</title>
-        <style>
+{% extends 'base.html' %}
+{% block content %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Now Playing</title>
+    <style>
         .movie-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -63,30 +62,32 @@
         .showing-item:last-child {
             margin-bottom: 0;
         }
-        </style>
-    </head>
-    <body>
-        <h1 style="text-align: center; margin: 2rem 0;">Now Playing</h1>
-        <div class="movie-grid">
-            {% for movie_title, showings in movies %}
-                <div class="movie-card">
-                    <img src="{{ showings[0].movie_poster_url }}"
-                         alt="{{ movie_title }}"
-                         class="movie-poster">
-                    <div class="movie-info">
-                        <h2 class="movie-title">{{ movie_title }}</h2>
-                        <div class="showing-list">
-                            {% for showing in showings %}
-                                <div class="showing-item">
-                                    <div class="showing-time">Showing at: {{ showing.showing_time.strftime("%B %d, %Y at %I:%M %p") }}</div>
-                                    <div class="tickets">Tickets remaining: {{ showing.tickets_remaining }}</div>
-                                    <a href="/showing/{{ showing.showing_id }}" class="book-button">Book Tickets</a>
-                                </div>
-                            {% endfor %}
-                        </div>
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; margin: 2rem 0;">Now Playing</h1>
+    <div class="movie-grid">
+        {% for movie_title, showings in movies %}
+            <div class="movie-card">
+                <img src="{{ showings[0].movie_poster_url }}"
+                     alt="{{ movie_title }}"
+                     class="movie-poster">
+                <div class="movie-info">
+                    <h2 class="movie-title">{{ movie_title }}</h2>
+                    <div class="showing-list">
+                        {% for showing in showings %}
+                            <div class="showing-item">
+                                <progress class="w-full"
+                                          max="{{ showing.capacity }}"
+                                          value="{{ showing.tickets_remaining }}"></progress>
+                                <div class="showing-time">Showing at: {{ showing.showing_time.strftime("%B %d, %Y at %I:%M %p") }}</div>
+                                <div class="tickets">Tickets remaining: {{ showing.tickets_remaining }}</div>
+                                <a href="/showing/{{ showing.showing_id }}" class="book-button">Book Tickets</a>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
-            {% endfor %}
-        </div>
-    </body>
-</html>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

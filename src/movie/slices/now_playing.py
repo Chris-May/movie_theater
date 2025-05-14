@@ -22,6 +22,7 @@ class NowPlayingReadModel(Base):
     movie_poster_url = Column(String, nullable=False)
     showing_time = Column(DateTime, nullable=False)
     tickets_remaining = Column(Integer, nullable=False)
+    capacity = Column(Integer, nullable=False)
 
     def __repr__(self):
         return (
@@ -30,6 +31,7 @@ class NowPlayingReadModel(Base):
             f'movie_title={self.movie_title}, '
             f'showing_time={self.showing_time}, '
             f'tickets_remaining={self.tickets_remaining} '
+            f'capacity={self.capacity} '
             '>'
         )
 
@@ -45,16 +47,8 @@ async def on_new_showing(event: events.ShowingAdded):
     session, event_store = services.get(Session, IEventStore)
     showing_id = str(event.entity_id)
 
-    # Check if showing already exists
-    if session.query(NowPlayingReadModel).filter_by(showing_id=showing_id).first():
-        msg = f"Showing {showing_id} already exists"
-        raise ValueError(msg)
-
     # Get movie details from event store
     event_stream = event_store.load_stream(event.movie_id)
-    if not event_stream:
-        msg = f"Movie {event.movie_id} does not exist"
-        raise ValueError(msg)
     movie = Movie(*event_stream)
 
     # Create new row in now playing read model
@@ -65,6 +59,7 @@ async def on_new_showing(event: events.ShowingAdded):
         movie_poster_url=movie.poster_url,
         showing_time=event.start_time,
         tickets_remaining=len(event.available_seats),
+        capacity=len(event.available_seats),
     )
     session.add(row)
     session.commit()

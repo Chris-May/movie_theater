@@ -65,6 +65,7 @@ unfixable = ['B']
 '__init__.py' = ['E402']
 '**/{tests,docs,tools}/*' = ['E402', 'E501', 'S101']
 'test_*.py' = ['E402', 'E501', 'S101']
+'src/movie/scripts/*.py' = ['DTZ']
 
 [tool.ruff.format]
 quote-style = 'preserve'

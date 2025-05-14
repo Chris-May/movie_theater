@@ -1,5 +1,6 @@
 import logging
 from collections import defaultdict
+from datetime import datetime, time
 
 import quart
 from sqlalchemy.orm import Session
@@ -19,12 +20,17 @@ async def list_now_playing():
     them by movie and sorts them by showing time.
     """
     session = services.get(Session)
+    today = datetime.now().date()  # noqa: DTZ005
+    tomorrow = datetime.combine(today, time.max)
     showings = (
         session.query(NowPlayingReadModel)
+        .filter(
+            NowPlayingReadModel.showing_time >= today,
+            NowPlayingReadModel.showing_time < tomorrow,
+        )
         .order_by(NowPlayingReadModel.movie_title, NowPlayingReadModel.showing_time)
         .all()
     )
-    logger.critical(showings)
 
     # Group showings by movie
     movies = defaultdict(list)
@@ -33,6 +39,5 @@ async def list_now_playing():
 
     # Convert to list of tuples (movie_title, showings) and sort by movie title
     movies_list = sorted(movies.items())
-    logger.info(movies_list)
 
     return await quart.render_template("now_playing.html", movies=movies_list, count=len(showings))
