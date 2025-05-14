@@ -9,6 +9,22 @@ from movie.domain.repos import ShowingRepo
 bp = quart.Blueprint("reserve_ticket", __name__)
 
 
+@bp.post('/showing/<string:showing_id>/_demo')
+async def reserve_ticket_demo(showing_id: str):
+    showing = await ShowingRepo().get_showing(UUID(showing_id))
+    available_seats = set(showing.available_seats)
+    form = await request.form
+    requested_seats = set(form.getlist("selected_seats"))
+    if not requested_seats.issubset(available_seats):
+        return await quart.render_template(
+            'thank_you.html', user=form['user'], selected_seats=requested_seats, start_time=showing.start_time
+        )
+    await showing.reserve_seats(form['user'], *requested_seats)
+    return await quart.render_template(
+        'thank_you.html', user=form['user'], selected_seats=requested_seats, start_time=showing.start_time
+    )
+
+
 @bp.post('/showing/<string:showing_id>')
 async def reserve_ticket(showing_id: str):
     showing = await ShowingRepo().get_showing(UUID(showing_id))
