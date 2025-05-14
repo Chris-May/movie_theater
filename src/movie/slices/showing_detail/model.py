@@ -1,5 +1,4 @@
 import itertools as it
-import json
 from collections.abc import Iterable
 
 from sqlalchemy import Column, DateTime, Integer, String
@@ -45,10 +44,6 @@ class ShowingDetail(Base):
         return self.all_seats.split(',')
 
     @property
-    def available(self) -> set[str]:
-        return set(self.available_seats.split(','))
-
-    @property
     def reserved_list(self) -> list[str]:
         return self.reserved_seats.split(',')
 
@@ -59,22 +54,12 @@ class ShowingDetail(Base):
     def seat_is_available(self, seat: str):
         return seat not in self.reserved_list
 
-    @property
-    def selected_dict(self):
-        return json.dumps({seat: False for seat in self.all_seat_list})
-
 
 async def handle_showing_added(event: events.ShowingAdded):
     session, event_store = services.get(Session, IEventStore)
     showing_id = str(event.entity_id)
-    if session.query(ShowingDetail).filter_by(showing_id=showing_id).first():
-        msg = f"Showing {showing_id} already exists"
-        raise ValueError(msg)
     all_seats = event.available_seats
     event_stream = event_store.load_stream(event.movie_id)
-    if not event_stream:
-        msg = f"Movie {event.movie_id} does not exist"
-        raise ValueError(msg)
     movie = Movie(*event_stream)
 
     row = ShowingDetail(
@@ -95,15 +80,9 @@ async def handle_ticket_reserved(event: events.TicketReserved):
     session = services.get(Session)
     showing_id = str(event.showing_id)
     row = session.query(ShowingDetail).filter_by(showing_id=showing_id).first()
-    if not row:
-        msg = f"Showing {showing_id} does not exist"
-        raise ValueError(msg)
     seat = event.seat_id
     available = ShowingDetail.str_to_seats(row.available_seats)
     reserved = ShowingDetail.str_to_seats(row.reserved_seats)
-    if seat not in available:
-        msg = f"Seat {seat} is not available for showing {showing_id}"
-        raise ValueError(msg)
     available.remove(seat)
     reserved.append(seat)
     row.available_seats = ShowingDetail.seats_to_str(available)
