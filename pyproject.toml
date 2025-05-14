@@ -22,7 +22,8 @@ dependencies = [
 datastar-py = { git = "https://github.com/starfederation/datastar", subdirectory = "sdk/python" }
 
 [project.scripts]
-movie = "movie:main"
+movie = "movie.web:entry"
+populate = 'movie.scripts.populate:go'
 
 [build-system]
 requires = ["hatchling"]
