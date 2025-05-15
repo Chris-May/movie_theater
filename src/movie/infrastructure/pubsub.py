@@ -9,6 +9,7 @@ from movie.infrastructure.event import DomainEvent
 from movie.infrastructure.store import IEventStore, StreamEvent
 from movie.slices import now_playing
 from movie.slices.giveaway import model as giveaway_model
+from movie.slices.scan_ticket import model as scan_ticket_model
 from movie.slices.showing_detail import model as showing_detail_model
 
 logger = logging.getLogger(__name__)
@@ -22,6 +23,7 @@ _subscriptions = {
     lambda e: isinstance(e, events.ShowingAdded): now_playing.on_new_showing,
     lambda e: isinstance(e, events.ShowingAdded): now_playing.on_ticket_reserved,
     lambda e: isinstance(e, events.TicketReserved): giveaway_model.handle_ticket_reserved,
+    lambda e: isinstance(e, events.TicketScanned): scan_ticket_model.handle_ticket_scanned,
 }
 
 

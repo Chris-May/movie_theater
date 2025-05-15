@@ -83,6 +83,14 @@ class Showing(Entity):
             )
             await self.publish(event)
 
+    async def scan_ticket(self, ticket_id):
+        event = events.TicketScanned(
+            ticket_id=ticket_id,
+            entity_id=self.id,
+            entity_version=self.version + 1,
+        )
+        await self.publish(event)
+
     def _on_creation(self, event: events.ShowingAdded):
         self.movie_id = event.movie_id
         self.start_time = event.start_time
@@ -92,6 +100,11 @@ class Showing(Entity):
     def _on_ticket_reserved(self, event: events.TicketReserved):
         self.available_seats.remove(event.seat_id)
 
+    def _on_ticket_scanned(self, event: events.TicketScanned):
+        # No state changes needed for ticket scanning
+        pass
+
     def register_events(self):
         self.apply.register(events.ShowingAdded, self._on_creation)
         self.apply.register(events.TicketReserved, self._on_ticket_reserved)
+        self.apply.register(events.TicketScanned, self._on_ticket_scanned)

@@ -10,6 +10,7 @@ from sqlalchemy import Connection, Engine, create_engine, select, text
 from sqlalchemy.orm import Session
 
 import movie.slices.reserve_ticket.view
+import movie.slices.scan_ticket.view
 from movie import services
 from movie.domain.model import UserID
 from movie.infrastructure.event import DomainEvent
@@ -81,6 +82,7 @@ def create_app(config_file=None) -> Quart:
     app.register_blueprint(add_showing.bp)
     app.register_blueprint(view.bp)
     app.register_blueprint(movie.slices.reserve_ticket.view.bp)
+    app.register_blueprint(movie.slices.scan_ticket.view.bp)
     app.register_blueprint(view_now_playing.bp)
     app.register_blueprint(giveaway_view.bp)
     Base.metadata.create_all(engine)

@@ -29,3 +29,12 @@ class TicketReserved(DomainEvent):
     @property
     def showing_id(self):
         return self.entity_id
+
+
+class TicketScanned(DomainEvent):
+    ticket_id: UUID
+    event_name: str = Field('TicketScanned', frozen=True)
+
+    @property
+    def showing_id(self):
+        return self.entity_id

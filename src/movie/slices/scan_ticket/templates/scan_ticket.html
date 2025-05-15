@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Scan Ticket{% endblock %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-center">Scan Ticket</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="scanTicketForm">
+                            <div class="mb-3 form-group">
+                                <label for="ticketId">Ticket ID</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="ticketId"
+                                       name="ticketId"
+                                       required>
+                            </div>
+                            <div class="mb-3 form-group">
+                                <label for="showingId">Showing ID</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="showingId"
+                                       name="showingId"
+                                       required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Scan Ticket</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="mt-4" id="resultContainer" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="text-center">Scan Result</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="resultMessage"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    document.getElementById('scanTicketForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const ticketId = document.getElementById('ticketId').value;
+        const showingId = document.getElementById('showingId').value;
+
+        try {
+            const response = await fetch(`/ticket/${ticketId}/scan`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `showing_id=${showingId}`
+            });
+
+            const result = await response.json();
+
+            const resultContainer = document.getElementById('resultContainer');
+            const resultMessage = document.getElementById('resultMessage');
+
+            resultContainer.style.display = 'block';
+
+            if (response.ok) {
+                resultMessage.innerHTML = `
+                    <div class="alert alert-success">
+                        <h4>Success!</h4>
+                        <p>${result.message}</p>
+                        <p><strong>Ticket ID:</strong> ${result.ticket_id}</p>
+                        <p><strong>Showing ID:</strong> ${result.showing_id}</p>
+                    </div>
+                `;
+            } else {
+                resultMessage.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h4>Error!</h4>
+                        <p>${result.error}</p>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            const resultContainer = document.getElementById('resultContainer');
+            const resultMessage = document.getElementById('resultMessage');
+
+            resultContainer.style.display = 'block';
+            resultMessage.innerHTML = `
+                <div class="alert alert-danger">
+                    <h4>Error!</h4>
+                    <p>An unexpected error occurred. Please try again.</p>
+                </div>
+            `;
+        }
+    });
+    </script>
+{% endblock %}
