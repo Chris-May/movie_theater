@@ -71,9 +71,9 @@ async def detail_updates(showing_id):
             async with app.app_context():
                 showing = await get_showing(showing_id)
                 yield ServerSentEventGenerator.merge_signals(dict(reservedSeats=showing.reserved_seats))
-                for seat in showing.reserved_list:
-                    yield ServerSentEventGenerator.remove_fragments(f'#selected-{seat}')
-                await asyncio.sleep(2)
+                reserved_ids = ', '.join(f'#selected-{seat}' for seat in showing.reserved_list)
+                yield ServerSentEventGenerator.remove_fragments(reserved_ids)
+                await asyncio.sleep(1)
 
     response = await make_datastar_response(updates())
     response.timeout = None
