@@ -215,16 +215,16 @@ async def main():
     before_now = [showing for showing in showing__start_times if showing['start_time'] < datetime.now()]
     user_id1 = uuid.uuid4()
     user_id2 = uuid.uuid4()
-    user1_tix = await asyncio.gather(
-        *[
-            reserve_seat(client=client, semaphore=semaphore, user_id=user_id1, **get_random_ticket(before_now))
-            for _ in range(100)
-        ]
-    )
     user2_tix = await asyncio.gather(
         *[
             reserve_seat(client=client, semaphore=semaphore, user_id=user_id2, **get_random_ticket(before_now))
             for _ in range(9)
+        ]
+    )
+    user1_tix = await asyncio.gather(
+        *[
+            reserve_seat(client=client, semaphore=semaphore, user_id=user_id1, **get_random_ticket(before_now))
+            for _ in range(100)
         ]
     )
     for item in user2_tix:
