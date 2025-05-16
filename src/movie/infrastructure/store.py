@@ -2,8 +2,8 @@ import abc
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, ConfigDict, Field
-from sqlalchemy import JSON, Uuid
+from pydantic import BaseModel, ConfigDict
+from sqlalchemy import JSON, DateTime, Uuid
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from movie.domain import events
@@ -49,7 +49,7 @@ class SavedEvent(Base):
     event_name: Mapped[str]
     event_data: Mapped[str] = mapped_column(JSON)
     meta_data: Mapped[str] = mapped_column(JSON)
-    stored_at: Mapped[datetime] = Field(default_factory=utc_now)
+    stored_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
 
     def to_domain_event(self):
         klass = event_to_class_map[self.event_name]
