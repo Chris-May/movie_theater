@@ -28,12 +28,12 @@ class UserTicketCount(Base):
         )
 
 
-async def handle_ticket_reserved(event: events.TicketReserved):
+async def handle_ticket_scan(event: events.TicketScanned):
     session = services.get(Session)
     user_id = str(event.user_id)
     current_month = datetime.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)  # noqa: DTZ005
 
-    # Get or create user record for this month
+    # Get or create a user record for this month
     user_count = session.query(UserTicketCount).filter_by(user_id=user_id, month=current_month).first()
 
     if not user_count:

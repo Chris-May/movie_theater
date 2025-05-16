@@ -22,7 +22,7 @@ _subscriptions = {
     lambda e: isinstance(e, events.TicketReserved): now_playing.on_ticket_reserved,
     lambda e: isinstance(e, events.ShowingAdded): now_playing.on_new_showing,
     lambda e: isinstance(e, events.ShowingAdded): now_playing.on_ticket_reserved,
-    lambda e: isinstance(e, events.TicketReserved): giveaway_model.handle_ticket_reserved,
+    lambda e: isinstance(e, events.TicketReserved): giveaway_model.handle_ticket_scan,
     lambda e: isinstance(e, events.TicketScanned): scan_ticket_model.handle_ticket_scanned,
 }
 

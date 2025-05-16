@@ -205,16 +205,9 @@ async def main():
         ticket = random.choice(available_seats)
         return dict(showing_id=showing['showing_id'], seat=ticket)
 
-    for _ in trange(150):
-        async with asyncio.TaskGroup() as tg:
-            for _ in range(100):
-                tg.create_task(
-                    reserve_seat(client=client, semaphore=semaphore, **get_random_ticket(showing__start_times))
-                )
-
-    before_now = [showing for showing in showing__start_times if showing['start_time'] < datetime.now()]
     user_id1 = uuid.uuid4()
     user_id2 = uuid.uuid4()
+    before_now = [showing for showing in showing__start_times if showing['start_time'] < datetime.now()]
     user2_tix = await asyncio.gather(
         *[
             reserve_seat(client=client, semaphore=semaphore, user_id=user_id2, **get_random_ticket(before_now))
@@ -224,9 +217,16 @@ async def main():
     user1_tix = await asyncio.gather(
         *[
             reserve_seat(client=client, semaphore=semaphore, user_id=user_id1, **get_random_ticket(before_now))
-            for _ in range(100)
+            for _ in range(50)
         ]
     )
+    for _ in trange(150):
+        async with asyncio.TaskGroup() as tg:
+            for _ in range(100):
+                tg.create_task(
+                    reserve_seat(client=client, semaphore=semaphore, **get_random_ticket(showing__start_times))
+                )
+
     for item in user2_tix:
         await scan_ticket(client, semaphore, item['showing_id'], item['seat'])
     for item in random.sample(user1_tix, 6):
