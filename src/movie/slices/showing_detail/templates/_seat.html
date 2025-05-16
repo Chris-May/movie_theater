@@ -17,7 +17,7 @@
                          width="1em"
                          style="display: inline-block"
                          class="seat">
-                        <circle data-attr-r="$reservedSeats.indexOf('{{ seat.upper() }}')>-1 ? .75 : 1" cx="1" cy="1" />
+                        <circle data-attr="{ r:$reservedSeats.indexOf('{{ seat.upper() }}')>-1 ? .5 : .75 , 'stroke-width':$reservedSeats.indexOf('{{ seat.upper() }}')>-1 ? 0.05 : 0.2 }" cx="1" cy="1" />
                         <line x1="0.125" y1="1.75" x2="1.75" y2="0.125" stroke="darkgrey" stroke-width="0.125" data-show="$reservedSeats.indexOf('{{ seat }}')>-1" />
                     </svg>
                 </label>

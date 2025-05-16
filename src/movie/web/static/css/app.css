@@ -122,7 +122,8 @@
   }
 }
 svg.seat {
-  fill: #eeedea;
+  fill: none;
+  stroke: #000;
   &.taken {
     fill: #f1f1f1;
   }

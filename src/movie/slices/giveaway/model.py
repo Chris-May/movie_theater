@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from movie import services
 from movie.domain import events
-from movie.infrastructure.store import Base
+from movie.infrastructure.store import Base, SavedEvent
 
 TICKET_THRESHOLD_FOR_ENTRY = 5
 
@@ -30,16 +30,27 @@ class UserTicketCount(Base):
 
 async def handle_ticket_scan(event: events.TicketScanned):
     session = services.get(Session)
-    user_id = str(event.user_id)
-    current_month = datetime.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)  # noqa: DTZ005
+    await scan_ticket(event, session)
 
+
+async def scan_ticket(event, session):
+    events = [
+        e.to_domain_event()
+        for e in (
+            session.query(SavedEvent)
+            .where(SavedEvent.stream_id == event.showing_id, SavedEvent.event_name == 'TicketReserved')
+            .all()
+        )
+    ]
+    matching_event = next(e for e in events if e.ticket_id == event.ticket_id)
+
+    user_id = str(matching_event.user_id)
+    current_month = datetime.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)  # noqa: DTZ005
     # Get or create a user record for this month
     user_count = session.query(UserTicketCount).filter_by(user_id=user_id, month=current_month).first()
-
     if not user_count:
         user_count = UserTicketCount(user_id=user_id, month=current_month, ticket_count=0, last_updated=datetime.now())  # noqa: DTZ005
         session.add(user_count)
-
     # Increment the count
     user_count.ticket_count += 1
     user_count.last_updated = datetime.now()  # noqa: DTZ005
