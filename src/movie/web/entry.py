@@ -6,7 +6,7 @@ from pathlib import Path
 import quart_flask_patch  # noqa: F401
 from jinja2 import FileSystemLoader
 from quart import Quart
-from sqlalchemy import Connection, Engine, create_engine, select, text
+from sqlalchemy import Engine, create_engine, select
 from sqlalchemy.orm import Session
 
 import movie.slices.reserve_ticket.view
@@ -54,18 +54,10 @@ def create_app(config_file=None) -> Quart:
     app.static_url_path = '/static'
     engine = create_engine(app.config['DATABASE_CONNECTION'])
 
-    def connection_factory():
-        with engine.connect() as conn:
-            yield conn
-
     def session_factory():
         with Session(engine) as session:
             yield session
 
-    ping = text('SELECT 1')
-    services.register_factory(
-        app, Connection, connection_factory, ping=lambda conn: conn.execute(ping), on_registry_close=engine.dispose
-    )
     services.register_factory(app, Session, session_factory)
     services.register_value(app, UserID, uuid.UUID('00000000-0000-4000-8000-000000000000'))
 

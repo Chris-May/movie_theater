@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import Column, Uuid
 from sqlalchemy.orm import Mapped, Session, mapped_column
 
 from movie import services
@@ -10,19 +10,17 @@ from movie.infrastructure.store import Base, IEventStore
 
 
 class ScannedTicket(Base):
-    """
-    A read model for scanned tickets.
-    This model is updated when a ticket is scanned at the theater entrance.
-    """
-
     __tablename__ = 'scanned_tickets'
-
     ticket_id: Mapped[UUID] = mapped_column(primary_key=True)
-    showing_id: Mapped[UUID] = mapped_column(ForeignKey('showings.id'))
-    movie_id: Mapped[UUID] = mapped_column(ForeignKey('movies.id'))
+    showing_id: Mapped[UUID] = Column(Uuid)
+    movie_id: Mapped[UUID] = Column(Uuid)
+    user_id: Mapped[UUID] = Column(Uuid)
 
     def __repr__(self):
-        return f"<ScannedTicket ticket_id={self.ticket_id}, showing_id={self.showing_id}, movie_id={self.movie_id}>"
+        return (
+            f"<ScannedTicket ticket_id={self.ticket_id}, showing_id={self.showing_id}, movie_id={self.movie_id}"
+            f", user_id={self.user_id}>"
+        )
 
 
 async def handle_ticket_scanned(event: events.TicketScanned):
@@ -41,3 +39,8 @@ async def handle_ticket_scanned(event: events.TicketScanned):
     # Add and commit to the database
     session.add(scanned_ticket)
     session.commit()
+
+
+async def get_scanned_tickets():
+    session = services.get(Session)
+    return session.query(ScannedTicket).all()

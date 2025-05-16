@@ -203,7 +203,7 @@ async def main():
     def get_random_ticket(showing_options):
         showing = random.choice(showing_options)
         ticket = random.choice(available_seats)
-        return dict(movie_id=showing['movie_id'], showing_id=showing['showing_id'], seat=ticket)
+        return dict(showing_id=showing['showing_id'], seat=ticket)
 
     for _ in trange(150):
         async with asyncio.TaskGroup() as tg:
@@ -217,21 +217,25 @@ async def main():
     user_id2 = uuid.uuid4()
     user1_tix = await asyncio.gather(
         *[
-            tg.create_task(
-                reserve_seat(client=client, semaphore=semaphore, user_id=user_id1, **get_random_ticket(before_now))
-            )
+            reserve_seat(client=client, semaphore=semaphore, user_id=user_id1, **get_random_ticket(before_now))
             for _ in range(100)
         ]
     )
     user2_tix = await asyncio.gather(
         *[
-            tg.create_task(
-                reserve_seat(client=client, semaphore=semaphore, user_id=user_id2, **get_random_ticket(before_now))
-            )
+            reserve_seat(client=client, semaphore=semaphore, user_id=user_id2, **get_random_ticket(before_now))
             for _ in range(9)
         ]
     )
-    return user1_tix, user2_tix
+    for item in user2_tix:
+        await scan_ticket(client, semaphore, item['showing_id'], item['seat'])
+    for item in random.sample(user1_tix, 6):
+        await scan_ticket(client, semaphore, item['showing_id'], item['seat'])
+
+
+async def scan_ticket(client, semaphore, showing_id, seat):
+    async with semaphore:
+        return await client.post('/ticket/scan', data={'showing_id': showing_id, 'seat': seat})
 
 
 def go():

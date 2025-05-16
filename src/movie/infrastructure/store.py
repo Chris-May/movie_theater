@@ -13,6 +13,7 @@ event_to_class_map = {
     'MovieAdded': events.MovieAdded,
     'ShowingAdded': events.ShowingAdded,
     'TicketReserved': events.TicketReserved,
+    'TicketScanned': events.TicketScanned,
 }
 
 
