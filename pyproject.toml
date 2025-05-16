@@ -24,6 +24,7 @@ datastar-py = { git = "https://github.com/starfederation/datastar", subdirectory
 [project.scripts]
 movie = "movie.web:entry"
 populate = 'movie.scripts.populate:go'
+replay = 'movie.scripts.replay:go'
 
 [build-system]
 requires = ["hatchling"]

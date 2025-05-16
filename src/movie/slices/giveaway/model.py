@@ -65,5 +65,6 @@ async def get_eligible_users():
     return (
         session.query(UserTicketCount)
         .filter(UserTicketCount.ticket_count >= TICKET_THRESHOLD_FOR_ENTRY, UserTicketCount.month == current_month)
+        .order_by(UserTicketCount.ticket_count.desc())
         .all()
     )
